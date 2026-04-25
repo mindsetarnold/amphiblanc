@@ -3,161 +3,252 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Amphi Blanc — Affectations</title>
+<title>Amphi Blanc — Promotion 50</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg:       #0F0F0F;
-    --surface:  #181818;
-    --surface2: #222222;
-    --border:   rgba(255,255,255,0.08);
-    --border2:  rgba(255,255,255,0.15);
-    --text:     #F0EDE8;
-    --text2:    #9A9690;
-    --text3:    #5A5652;
-    --gold:     #C9A84C;
-    --gold-bg:  rgba(201,168,76,0.12);
-    --gold-lt:  rgba(201,168,76,0.06);
-    --green:    #4CAF7D;
-    --green-bg: rgba(76,175,125,0.12);
-    --red:      #E05555;
-    --red-bg:   rgba(224,85,85,0.12);
-    --blue:     #5B8FD4;
-    --radius:   6px;
-    --radius-lg:10px;
-  }
-  html { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
-  body { min-height: 100vh; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── Layout ── */
-  .page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-  .header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border2); }
-  .header-left {}
-  .title { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
-  .title span { color: var(--gold); }
-  .subtitle { font-size: 12px; color: var(--text3); margin-top: 3px; letter-spacing: 0.04em; text-transform: uppercase; }
-  .sync-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 6px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
-  .dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+:root {
+  --hue: 220;
+  --accent: hsl(var(--hue), 60%, 42%);
+  --accent-lt: hsl(var(--hue), 60%, 95%);
+  --accent-mid: hsl(var(--hue), 60%, 88%);
+  --accent-dark: hsl(var(--hue), 60%, 30%);
+  --bg: hsl(var(--hue), 15%, 97%);
+  --surface: #ffffff;
+  --surface2: hsl(var(--hue), 12%, 94%);
+  --border: hsl(var(--hue), 12%, 88%);
+  --border2: hsl(var(--hue), 12%, 78%);
+  --text: hsl(var(--hue), 20%, 12%);
+  --text2: hsl(var(--hue), 12%, 42%);
+  --text3: hsl(var(--hue), 10%, 62%);
+  --green: #1a7a4a;
+  --green-bg: #d4f0e2;
+  --red: #a02020;
+  --red-bg: #fde8e8;
+  --amber: #8a5a0a;
+  --amber-bg: #fdf0d5;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+}
 
-  /* ── Screens ── */
-  .screen { display: none; }
-  .screen.active { display: block; }
+html { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+body { min-height: 100vh; }
 
-  /* ── Lock ── */
-  .lock-wrap { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
-  .lock-box { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 2.5rem 2rem; width: 100%; max-width: 360px; }
-  .lock-box h2 { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-  .lock-box p { font-size: 12px; color: var(--text2); margin-bottom: 1.5rem; }
-  .lock-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+.topbar-brand { display: flex; align-items: center; gap: 12px; }
+.topbar-logo { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.topbar-title { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.topbar-subtitle { font-size: 11px; color: var(--text3); font-weight: 400; }
+.topbar-right { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text3); }
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-  /* ── Forms ── */
-  .field { margin-bottom: 12px; }
-  .field label { display: block; font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
-  input[type="text"], input[type="password"], textarea, select {
-    width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius);
-    padding: 8px 10px; color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; outline: none;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
-  textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
-  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239A9690' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; }
-  select option { background: #222; }
-  .pin-row { display: flex; gap: 8px; }
-  .err-msg { font-size: 11px; color: var(--red); margin-top: 6px; min-height: 14px; }
+/* ── LAYOUT ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* ── Buttons ── */
-  .btn { display: inline-flex; align-items: center; gap: 5px; border-radius: var(--radius); padding: 0 14px; height: 34px; cursor: pointer; font-size: 12px; font-weight: 500; font-family: 'IBM Plex Sans', sans-serif; border: 1px solid var(--border2); background: var(--surface2); color: var(--text); transition: background .15s, border-color .15s; white-space: nowrap; }
-  .btn:hover { background: #2a2a2a; border-color: var(--border2); }
-  .btn-gold { background: var(--gold); border-color: var(--gold); color: #0F0F0F; font-weight: 600; }
-  .btn-gold:hover { background: #d4b05a; }
-  .btn-green { background: var(--green-bg); border-color: rgba(76,175,125,0.3); color: var(--green); }
-  .btn-green:hover { background: rgba(76,175,125,0.2); }
-  .btn-red { background: var(--red-bg); border-color: rgba(224,85,85,0.3); color: var(--red); }
-  .btn-red:hover { background: rgba(224,85,85,0.2); }
-  .btn-lg { height: 42px; font-size: 14px; border-radius: var(--radius); }
-  .btn-sm { height: 28px; padding: 0 10px; font-size: 11px; }
-  .btn-full { width: 100%; justify-content: center; }
+/* ── SCREENS ── */
+.screen { display: none; }
+.screen.active { display: block; }
 
-  /* ── Tabs ── */
-  .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; gap: 0; }
-  .tab { background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 16px; cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text3); font-family: 'IBM Plex Sans', sans-serif; white-space: nowrap; transition: color .15s, border-color .15s; margin-bottom: -1px; letter-spacing: 0.02em; text-transform: uppercase; }
-  .tab:hover { color: var(--text); }
-  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .admin-tab { display: none; }
+/* ── HOME ── */
+.home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 600px; margin: 3rem auto 0; }
+.home-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow .2s, transform .15s, border-color .2s;
+  box-shadow: var(--shadow);
+}
+.home-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.12); transform: translateY(-2px); border-color: var(--accent); }
+.home-card-icon { font-size: 36px; margin-bottom: 1rem; }
+.home-card-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.home-card-sub { font-size: 13px; color: var(--text2); }
+.home-hero { text-align: center; padding: 3rem 1rem 1rem; }
+.home-hero h1 { font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 8px; }
+.home-hero p { font-size: 15px; color: var(--text2); }
 
-  /* ── Cards ── */
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-  .card-title { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+/* ── ADMIN LOCK ── */
+.lock-wrap { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+.lock-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem 2rem; text-align: center; max-width: 360px; width: 100%; box-shadow: var(--shadow); }
+.lock-icon { font-size: 36px; margin-bottom: 1rem; }
+.lock-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.lock-box p { font-size: 13px; color: var(--text2); margin-bottom: 1.2rem; }
+.pin-row { display: flex; gap: 8px; }
+.pin-row input { text-align: center; letter-spacing: 3px; font-family: 'DM Mono', monospace; }
 
-  /* ── Stats ── */
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
-  .stat-label { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-  .stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 600; color: var(--text); }
-  .stat-value.gold { color: var(--gold); }
+/* ── TABS ── */
+.tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; overflow-x: auto; gap: 0; }
+.tab { background: none; border: none; border-bottom: 3px solid transparent; padding: 10px 20px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text2); font-family: 'Syne', sans-serif; white-space: nowrap; transition: color .15s, border-color .15s; margin-bottom: -2px; letter-spacing: 0.01em; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.admin-tab { display: none; }
 
-  /* ── Progress bar ── */
-  .progress-wrap { margin-bottom: 1.5rem; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 6px; }
-  .progress-bar { height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width .4s ease; }
+/* ── CARDS ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 1rem; letter-spacing: 0.01em; }
 
-  /* ── Main affectation table ── */
-  .aff-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-  .aff-table-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); }
-  .aff-table-title { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
-  table { width: 100%; border-collapse: collapse; }
-  th { text-align: left; padding: 8px 14px; font-size: 10px; font-weight: 600; color: var(--text3); border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.06em; background: var(--bg); }
-  td { padding: 0; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  .td-inner { padding: 8px 14px; display: flex; align-items: center; }
-  tr:hover td { background: rgba(255,255,255,0.02); }
+/* ── FORMS ── */
+label { font-size: 11px; font-weight: 600; color: var(--text2); display: block; margin-bottom: 5px; letter-spacing: 0.06em; text-transform: uppercase; }
+input, select, textarea {
+  width: 100%; font-family: 'Syne', sans-serif; font-size: 14px;
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 9px 12px; color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px hsl(var(--hue),60%,42%,0.12); }
+textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.field { margin-bottom: 12px; }
 
-  /* Rang badge */
-  .rang { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text3); min-width: 32px; }
-  .rang.top3 { color: var(--gold); }
+/* ── BUTTONS ── */
+.btn { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius); padding: 0 18px; height: 38px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: 'Syne', sans-serif; border: 1.5px solid var(--border2); background: var(--surface); color: var(--text); transition: all .15s; letter-spacing: 0.01em; }
+.btn:hover { background: var(--surface2); }
+.btn:active { transform: scale(0.98); }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.btn-green { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-green:hover { background: #145f38; }
+.btn-red { background: var(--red-bg); border-color: #e0a0a0; color: var(--red); }
+.btn-red:hover { background: #f8d0d0; }
+.btn-sm { height: 30px; padding: 0 12px; font-size: 12px; }
 
-  /* Nom */
-  .nom { font-size: 13px; font-weight: 500; color: var(--text); }
+/* ── STATUS ── */
+.status { font-size: 12px; min-height: 18px; margin-top: 6px; font-weight: 600; }
+.ok  { color: var(--green); }
+.err { color: var(--red); }
 
-  /* Select inline */
-  .select-poste { background: transparent; border: 1px solid transparent; border-radius: var(--radius); padding: 5px 28px 5px 8px; color: var(--text); font-size: 12px; font-family: 'IBM Plex Sans', sans-serif; cursor: pointer; transition: border-color .15s, background .15s; min-width: 240px; max-width: 100%; }
-  .select-poste:hover { border-color: var(--border2); background: var(--surface2); }
-  .select-poste:focus { border-color: var(--gold); background: var(--surface2); box-shadow: 0 0 0 2px rgba(201,168,76,0.15); }
-  .select-poste.chosen { color: var(--gold); font-weight: 500; border-color: rgba(201,168,76,0.3); background: var(--gold-bg); }
+/* ── TABLE ── */
+.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 1rem; }
+.table-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.table-head-title { font-size: 13px; font-weight: 700; color: var(--text); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 9px 14px; font-size: 10px; font-weight: 700; color: var(--text2); border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.07em; background: var(--bg); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--accent-lt); }
+.zebra tr:nth-child(even) td { background: hsl(var(--hue),10%,97%); }
+.zebra tr:nth-child(even):hover td { background: var(--accent-lt); }
 
-  /* Status pill */
-  .pill { display: inline-flex; align-items: center; gap: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 99px; }
-  .pill-done { background: var(--green-bg); color: var(--green); border: 1px solid rgba(76,175,125,0.2); }
-  .pill-pending { background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
+/* ── BADGES ── */
+.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; font-family: 'DM Mono', monospace; }
+.badge-gray  { background: var(--surface2); color: var(--text2); }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-accent{ background: var(--accent-lt); color: var(--accent-dark); }
 
-  /* Admin table */
-  .admin-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem; }
-  .admin-table-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .admin-table-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
-  .badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
-  .del-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 12px; padding: 3px 6px; border-radius: 4px; transition: color .15s, background .15s; }
-  .del-btn:hover { color: var(--red); background: var(--red-bg); }
-  .empty { text-align: center; padding: 2.5rem; color: var(--text3); font-size: 12px; }
-  .flex-gap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .flex-between { display: flex; align-items: center; justify-content: space-between; }
+/* ── AMPHI MODE ── */
+.amphi-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  transition: border-color .15s;
+}
+.amphi-row.done { background: hsl(var(--hue),10%,97%); }
+.amphi-row.done .amphi-name { color: var(--text2); }
+.amphi-row.current { border-color: var(--accent); box-shadow: 0 0 0 3px hsl(var(--hue),60%,42%,0.10); background: var(--accent-lt); }
+.amphi-rank { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; color: var(--text2); text-align: center; }
+.amphi-row.current .amphi-rank { color: var(--accent); }
+.amphi-name { font-weight: 600; font-size: 14px; }
+.amphi-choice { font-size: 13px; color: var(--text2); font-style: italic; }
+.amphi-row.done .amphi-choice { font-style: normal; color: var(--accent-dark); font-weight: 600; }
+.amphi-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.amphi-select-wrap select { font-size: 13px; height: 34px; padding: 4px 32px 4px 10px; }
 
-  /* Status msg */
-  .status-msg { font-size: 11px; min-height: 16px; font-weight: 500; }
-  .ok { color: var(--green); }
-  .er { color: var(--red); }
+/* ── LIVE SCREEN ── */
+.live-layout { display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start; }
+@media (max-width: 768px) { .live-layout { grid-template-columns: 1fr; } }
 
-  code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: var(--surface2); padding: 1px 5px; border-radius: 3px; color: var(--text2); }
+.live-feed { }
+.live-item {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+.live-item:last-child { border-bottom: none; }
+.live-rank { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700; color: var(--text3); text-align: center; }
+.live-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.live-post { font-size: 12px; color: var(--accent-dark); font-weight: 600; margin-top: 1px; }
+.live-pending { font-size: 12px; color: var(--text3); font-style: italic; margin-top: 1px; }
 
-  @media (max-width: 600px) {
-    .stats { grid-template-columns: 1fr 1fr; }
-    .select-poste { min-width: 160px; }
-    .header { flex-direction: column; align-items: flex-start; gap: 8px; }
-  }
+/* ── PANEL ── */
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); position: sticky; top: 70px; }
+.panel-header { padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--bg); }
+.panel-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.panel-subtitle { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.univers-block { border-bottom: 1px solid var(--border); }
+.univers-block:last-child { border-bottom: none; }
+.univers-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; cursor: pointer; background: none; border: none; width: 100%; text-align: left; font-family: 'Syne', sans-serif; }
+.univers-header:hover { background: var(--bg); }
+.univers-name { font-size: 12px; font-weight: 700; color: var(--text); }
+.univers-badge { font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 700; padding: 2px 7px; border-radius: 99px; }
+.univers-chevron { font-size: 9px; color: var(--text3); transition: transform .2s; }
+.univers-chevron.open { transform: rotate(180deg); }
+.univers-body { padding: 4px 0 8px; }
+.sg-row { padding: 4px 14px; }
+.sg-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+.sg-name { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
+.sg-count { font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 700; color: var(--text); white-space: nowrap; margin-left: 4px; }
+.sg-bar-bg { height: 5px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+.sg-bar-fill { height: 100%; border-radius: 99px; transition: width .5s ease; }
+.sg-zero .sg-name { color: var(--text3); text-decoration: line-through; }
+.sg-zero .sg-count { color: var(--text3); }
+
+/* ── LIVE STATS ── */
+.live-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
+.live-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow); }
+.live-stat-label { font-size: 10px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+.live-stat-value { font-size: 28px; font-weight: 700; color: var(--text); font-family: 'DM Mono', monospace; }
+
+/* ── MISC ── */
+.empty { text-align: center; padding: 2.5rem; color: var(--text3); font-size: 13px; }
+.del-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 13px; padding: 3px 7px; border-radius: 6px; }
+.del-btn:hover { color: var(--red); background: var(--red-bg); }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-gap { display: flex; align-items: center; gap: 8px; }
+code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--surface2); padding: 1px 6px; border-radius: 4px; }
+
+/* ── COLOR PICKER ── */
+.color-swatches { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.swatch { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: transform .15s, border-color .15s; }
+.swatch:hover { transform: scale(1.15); }
+.swatch.active { border-color: var(--text); }
+.swatch-custom { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.swatch-custom input[type=range] { width: 180px; accent-color: var(--accent); }
+
+@media (max-width: 560px) {
+  .home-grid { grid-template-columns: 1fr; }
+  .amphi-row { grid-template-columns: 40px 1fr; }
+  .amphi-choice, .amphi-actions { grid-column: 2; }
+}
 </style>
 </head>
 <body>
@@ -173,41 +264,64 @@ const firebaseConfig = {
   appId: "1:91659498687:web:33b4a83265eaaef4e5c20a",
   measurementId: "G-S6P9DLTJ2N"
 };
-// Utilise un nœud Firebase séparé pour ne pas interférer avec l'autre plateforme
-const FB_ROOT = 'amphi';
-const FIREBASE_CONFIGURED = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
+// Namespace Firebase séparé pour ne pas interférer avec la plateforme de vœux
+const FB_NS = 'amphi/';
+const FIREBASE_CONFIGURED = true;
 </script>
 
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <div class="title">Amphi <span>Blanc</span></div>
-      <div class="subtitle">Affectations définitives — Promotion 50</div>
+<!-- ══ TOP BAR ══ -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">🎓</div>
+    <div>
+      <div class="topbar-title">Amphi Blanc</div>
+      <div class="topbar-subtitle">Promotion 50 — IRA de Bastia</div>
     </div>
-    <div class="sync-indicator">
-      <span class="dot" id="sync-dot"></span>
-      <span id="sync-label">—</span>
+  </div>
+  <div class="topbar-right">
+    <div class="sync-dot" id="sync-dot" style="background:var(--text3)"></div>
+    <span id="sync-label">Connexion…</span>
+    <button class="btn btn-sm" onclick="showScreen('screen-home')" style="margin-left:8px;">Accueil</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ══ HOME ══ -->
+  <div id="screen-home" class="screen active">
+    <div class="home-hero">
+      <h1>Choix définitifs des postes</h1>
+      <p>Saisissez et suivez en direct les affectations de la promotion</p>
+    </div>
+    <div class="home-grid">
+      <div class="home-card" onclick="showScreen('screen-admin-lock')">
+        <div class="home-card-icon">🔐</div>
+        <div class="home-card-title">Administration</div>
+        <div class="home-card-sub">Saisie des élèves, postes et choix en amphi</div>
+      </div>
+      <div class="home-card" onclick="showScreen('screen-live')">
+        <div class="home-card-icon">📡</div>
+        <div class="home-card-title">Suivre en direct</div>
+        <div class="home-card-sub">Affichage en temps réel des choix effectués</div>
+      </div>
     </div>
   </div>
 
-  <!-- ══ LOCK ══ -->
-  <div id="screen-lock" class="screen active">
+  <!-- ══ ADMIN LOCK ══ -->
+  <div id="screen-admin-lock" class="screen">
     <div class="lock-wrap">
       <div class="lock-box">
-        <h2>Accès</h2>
-        <p>Entrez le code administrateur pour gérer les données, ou accédez directement à l'amphi.</p>
-        <div class="field">
-          <label>Code administrateur</label>
-          <div class="pin-row">
-            <input type="password" id="admin-pin-input" placeholder="Code admin" onkeydown="if(event.key==='Enter')tryAdmin()" />
-            <button class="btn btn-gold" onclick="tryAdmin()">Entrer</button>
-          </div>
-          <div class="err-msg" id="pin-err"></div>
+        <div class="lock-icon">🔐</div>
+        <h2>Accès administrateur</h2>
+        <p>Entrez le code admin pour accéder à la gestion de l'amphi.</p>
+        <div class="pin-row">
+          <input type="password" id="admin-pin-input" placeholder="Code admin" maxlength="30" onkeydown="if(event.key==='Enter')tryAdmin()" />
+          <button class="btn btn-accent" onclick="tryAdmin()">Entrer</button>
         </div>
-        <hr class="lock-divider" />
-        <button class="btn btn-lg btn-full" onclick="showScreen('screen-amphi')" style="background:var(--surface2);border-color:var(--border2);">
-          → Accéder à l'amphi blanc
-        </button>
+        <div class="status err" id="admin-pin-err"></div>
+        <div style="margin-top:1rem;">
+          <button class="btn btn-sm" onclick="showScreen('screen-home')">← Retour</button>
+        </div>
       </div>
     </div>
   </div>
@@ -216,517 +330,588 @@ const FIREBASE_CONFIGURED = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
   <div id="screen-admin" class="screen">
     <div class="flex-between" style="margin-bottom:1.5rem;">
       <div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">Administration</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Gérez les élèves et les postes</div>
+        <h1 style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Administration</h1>
+        <p style="font-size:13px;color:var(--text2);margin-top:2px;">Gérez les données et saisissez les choix en amphi.</p>
       </div>
-      <div class="flex-gap">
-        <button class="btn btn-sm" onclick="exportCSV()">Exporter CSV</button>
-        <button class="btn btn-sm" onclick="showScreen('screen-amphi')">→ Amphi</button>
-        <button class="btn btn-sm" onclick="showScreen('screen-lock')">Verrouiller</button>
-      </div>
+      <button class="btn btn-sm" onclick="showScreen('screen-home')">← Accueil</button>
     </div>
-
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('tab-eleves',this)">Élèves</button>
-      <button class="tab" onclick="switchTab('tab-postes',this)">Postes</button>
-      <button class="tab" onclick="switchTab('tab-resultats',this)">Résultats</button>
-      <button class="tab" onclick="switchTab('tab-settings',this)">Paramètres</button>
+      <button class="tab active" onclick="switchAdminTab('tab-students',this)">Élèves</button>
+      <button class="tab" onclick="switchAdminTab('tab-posts',this)">Postes</button>
+      <button class="tab" onclick="switchAdminTab('tab-amphi',this)">Mode amphi</button>
+      <button class="tab" onclick="switchAdminTab('tab-settings',this)">Paramètres</button>
     </div>
 
-    <!-- Tab élèves -->
-    <div id="tab-eleves" class="admin-tab" style="display:block;">
+    <!-- Tab Élèves -->
+    <div id="tab-students" class="admin-tab" style="display:block;">
       <div class="card">
         <div class="card-title">Importer des élèves</div>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Un élève par ligne : <code>rang;Prénom Nom</code> — ex : <code>1;Marie Dupont</code></p>
-        <div class="field"><textarea id="eleves-bulk" placeholder="1;Marie Dupont&#10;2;Jean Martin&#10;3;Sophie Bernard"></textarea></div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Un élève par ligne : <code>rang;Prénom Nom</code> — ex : <code>1;Marie Dupont</code></p>
+        <div class="field"><textarea id="students-bulk" placeholder="1;Marie Dupont&#10;2;Jean Martin&#10;3;Sophie Bernard"></textarea></div>
         <div class="flex-gap">
-          <button class="btn btn-gold" onclick="importEleves()">Importer</button>
-          <button class="btn btn-red btn-sm" onclick="clearEleves()">Tout effacer</button>
+          <button class="btn btn-accent" onclick="importStudents()">Importer</button>
+          <button class="btn btn-red btn-sm" onclick="clearStudents()">Tout effacer</button>
         </div>
-        <div class="status-msg" id="eleves-status"></div>
+        <div class="status" id="students-status"></div>
       </div>
-      <div class="admin-table-wrap">
-        <div class="admin-table-head">
-          <span class="admin-table-title">Élèves enregistrés</span>
-          <span class="badge" id="eleves-count">0</span>
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-head-title">Élèves enregistrés</span>
+          <span class="badge badge-gray" id="students-count">0</span>
         </div>
-        <div id="eleves-table"><div class="empty">Aucun élève enregistré.</div></div>
+        <div id="students-table"><div class="empty">Aucun élève enregistré.</div></div>
       </div>
     </div>
 
-    <!-- Tab postes -->
-    <div id="tab-postes" class="admin-tab">
+    <!-- Tab Postes -->
+    <div id="tab-posts" class="admin-tab">
       <div class="card">
         <div class="card-title">Importer des postes</div>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Un poste par ligne. Les doublons sont gérés automatiquement (ex : 8 fois le même nom = 8 exemplaires).</p>
-        <div class="field"><textarea id="postes-bulk" placeholder="Chargé de mission préfectoral&#10;Chargé de mission préfectoral&#10;Chargé de mission DASEN&#10;Attaché d'administration hospitalière"></textarea></div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Un poste par ligne : <code>univers;sous-groupe;nom du poste</code><br>Ex : <code>AC;Intérieur;Chargé de mission préfectoral</code></p>
+        <div class="field"><textarea id="posts-bulk" placeholder="AC;Intérieur;Chargé de mission&#10;ATE;Éducation;DASEN adjoint&#10;ASU;Santé;Attaché hospitalier"></textarea></div>
         <div class="flex-gap">
-          <button class="btn btn-gold" onclick="importPostes()">Importer</button>
-          <button class="btn btn-red btn-sm" onclick="clearPostes()">Tout effacer</button>
+          <button class="btn btn-accent" onclick="importPosts()">Importer</button>
+          <button class="btn btn-red btn-sm" onclick="clearPosts()">Tout effacer</button>
         </div>
-        <div class="status-msg" id="postes-status"></div>
+        <div class="status" id="posts-status"></div>
       </div>
-      <div class="admin-table-wrap">
-        <div class="admin-table-head">
-          <span class="admin-table-title">Postes enregistrés</span>
-          <span class="badge" id="postes-count">0</span>
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-head-title">Postes enregistrés</span>
+          <span class="badge badge-gray" id="posts-count">0</span>
         </div>
-        <div id="postes-table"><div class="empty">Aucun poste enregistré.</div></div>
+        <div id="posts-table"><div class="empty">Aucun poste enregistré.</div></div>
       </div>
     </div>
 
-    <!-- Tab résultats -->
-    <div id="tab-resultats" class="admin-tab">
+    <!-- Tab Mode Amphi -->
+    <div id="tab-amphi" class="admin-tab">
       <div class="flex-between" style="margin-bottom:1rem;">
-        <div style="font-size:12px;color:var(--text2);">Affectations enregistrées en temps réel.</div>
+        <div>
+          <h2 style="font-size:16px;font-weight:700;">Saisie en amphi</h2>
+          <p style="font-size:13px;color:var(--text2);">Saisissez les choix dans l'ordre du classement. Seuls les postes encore disponibles apparaissent.</p>
+        </div>
         <div class="flex-gap">
-          <button class="btn btn-sm" onclick="exportCSV()">Exporter CSV</button>
-          <button class="btn btn-red btn-sm" onclick="resetAffectations()">Réinitialiser</button>
+          <button class="btn btn-green" onclick="exportChoicesCSV()">⬇ Télécharger CSV</button>
+          <button class="btn btn-red btn-sm" onclick="resetAllChoices()">Réinitialiser</button>
         </div>
       </div>
-      <div class="admin-table-wrap">
-        <div id="resultats-table"><div class="empty">Aucune affectation enregistrée.</div></div>
-      </div>
+      <div id="amphi-list"><div class="empty">Chargement…</div></div>
     </div>
 
-    <!-- Tab paramètres -->
+    <!-- Tab Paramètres -->
     <div id="tab-settings" class="admin-tab">
       <div class="card">
-        <div class="card-title">Code administrateur</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-          <div class="field"><label>Nouveau code</label><input type="password" id="new-pin" placeholder="Nouveau code" /></div>
-          <div class="field"><label>Confirmer</label><input type="password" id="confirm-pin" placeholder="Confirmer" /></div>
+        <div class="card-title">Couleur de l'interface</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Choisissez la teinte générale de la plateforme. Le changement s'applique immédiatement à toutes les interfaces.</p>
+        <div class="color-swatches" id="color-swatches"></div>
+        <div class="swatch-custom">
+          <label style="margin:0;text-transform:none;letter-spacing:0;font-size:13px;color:var(--text2);">Teinte personnalisée</label>
+          <input type="range" id="hue-slider" min="0" max="360" value="220" oninput="applyHue(this.value, false)" onchange="applyHue(this.value, true)" />
+          <span id="hue-value" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);">220°</span>
         </div>
-        <button class="btn btn-gold" onclick="changePin()">Enregistrer</button>
-        <div class="status-msg" id="pin-change-status"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Code administrateur</div>
+        <div class="row2">
+          <div><label>Nouveau code</label><input type="password" id="new-pin" placeholder="Nouveau code" /></div>
+          <div><label>Confirmer</label><input type="password" id="confirm-pin" placeholder="Confirmer" /></div>
+        </div>
+        <button class="btn btn-accent" onclick="changePin()">Enregistrer</button>
+        <div class="status" id="pin-change-status"></div>
       </div>
     </div>
   </div>
 
-  <!-- ══ AMPHI ══ -->
-  <div id="screen-amphi" class="screen">
+  <!-- ══ LIVE ══ -->
+  <div id="screen-live" class="screen">
     <div class="flex-between" style="margin-bottom:1.5rem;">
       <div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">Affectations en direct</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Sélectionnez le poste de chaque élève au fur et à mesure</div>
+        <h1 style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Suivi en direct</h1>
+        <p style="font-size:13px;color:var(--text2);margin-top:2px;">Les choix s'affichent en temps réel au fil de l'amphi.</p>
       </div>
-      <button class="btn btn-sm" onclick="showScreen('screen-lock')">← Retour</button>
+      <button class="btn btn-sm" onclick="showScreen('screen-home')">← Accueil</button>
     </div>
 
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">Affectés</div>
-        <div class="stat-value gold" id="stat-affectes">0</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">En attente</div>
-        <div class="stat-value" id="stat-attente">—</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Postes restants</div>
-        <div class="stat-value" id="stat-postes">—</div>
-      </div>
+    <div class="live-stats">
+      <div class="live-stat"><div class="live-stat-label">Choix effectués</div><div class="live-stat-value" id="live-done">0</div></div>
+      <div class="live-stat"><div class="live-stat-label">Postes restants</div><div class="live-stat-value" id="live-remaining">—</div></div>
     </div>
 
-    <div class="progress-wrap">
-      <div class="progress-label">
-        <span>Progression</span>
-        <span id="progress-pct">0%</span>
+    <div class="live-layout">
+      <div>
+        <div class="table-wrap">
+          <div class="table-head">
+            <span class="table-head-title">Choix en cours</span>
+            <input type="text" id="live-search" placeholder="Rechercher…" style="width:160px;height:28px;font-size:12px;" oninput="renderLive()" />
+          </div>
+          <div id="live-feed"><div class="empty">En attente des premiers choix…</div></div>
+        </div>
       </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    </div>
-
-    <div class="aff-table-wrap">
-      <div class="aff-table-head">
-        <span class="aff-table-title">Liste des élèves</span>
-        <input type="text" id="amphi-search" placeholder="Rechercher…" style="width:180px;height:28px;font-size:11px;" oninput="renderAmphiTable()" />
+      <div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Postes disponibles</div>
+            <div class="panel-subtitle">Cliquez pour réduire/ouvrir</div>
+          </div>
+          <div id="live-panel-body"><div class="empty" style="padding:1.5rem;font-size:12px;">Chargement…</div></div>
+        </div>
       </div>
-      <div id="amphi-table"><div class="empty">Chargement…</div></div>
     </div>
   </div>
-</div>
+
+</div><!-- /.page -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <script>
-// ════════════════════════════════════════════════════
-//  ÉTAT
-// ════════════════════════════════════════════════════
-let eleves = [];       // [{rang, nom}]
-let postes = [];       // [{id, nom, order}]
-let affectations = {}; // { rang: posteId }
-let db = null;
+// ════════════════════════════════════
+//  STATE
+// ════════════════════════════════════
+let students = [];  // [{rank, name}]
+let posts    = [];  // [{id, name, univers, sousGroupe, order}]
+let choices  = {};  // { rank: postId }
+let db       = null;
+let currentHue = 220;
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  FIREBASE
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════
 function initFirebase() {
-  if (!FIREBASE_CONFIGURED) { loadLocal(); return; }
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.database();
-    setSync('Connexion…', false);
     setupListeners();
-  } catch(e) { setSync('Erreur', false); }
+  } catch(e) { setSyncLabel('Erreur', false); }
 }
 
-function setSync(label, live) {
-  document.getElementById('sync-label').textContent = label;
-  document.getElementById('sync-dot').className = 'dot' + (live ? ' live' : '');
+function setSyncLabel(t, ok) {
+  document.getElementById('sync-label').textContent = t;
+  document.getElementById('sync-dot').style.background = ok ? 'var(--green)' : 'var(--text3)';
 }
 
 function setupListeners() {
-  [['eleves', v => { eleves = v ? Object.values(v).sort((a,b)=>a.rang-b.rang) : []; }],
-   ['postes', v => { postes = v ? Object.values(v).sort((a,b)=>(a.order||0)-(b.order||0)) : []; }],
-   ['affectations', v => { affectations = v || {}; }]
-  ].forEach(([path, handler]) => {
-    db.ref(FB_ROOT+'/'+path).on('value', snap => {
-      handler(snap.val());
-      refresh();
-      setSync('Sync · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), true);
+  const paths = ['students','posts','choices','settings'];
+  let loaded = new Set();
+  paths.forEach(path => {
+    db.ref(FB_NS+path).on('value', snap => {
+      const v = snap.val();
+      if (path === 'students') students = v ? Object.values(v).sort((a,b)=>a.rank-b.rank) : [];
+      if (path === 'posts')    posts    = v ? Object.values(v).sort((a,b)=>(a.order||0)-(b.order||0)) : [];
+      if (path === 'choices')  choices  = v || {};
+      if (path === 'settings') {
+        if (v?.hue !== undefined) applyHue(v.hue, false);
+        if (v?.hue !== undefined) { document.getElementById('hue-slider').value = v.hue; document.getElementById('hue-value').textContent = v.hue+'°'; }
+      }
+      loaded.add(path);
+      refreshAll();
+      setSyncLabel('Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), true);
     });
   });
 }
 
-const LS = {
-  get: k => { try { return JSON.parse(localStorage.getItem('amphi_'+k)); } catch(e){ return null; } },
-  set: (k,v) => localStorage.setItem('amphi_'+k, JSON.stringify(v))
-};
-function loadLocal() {
-  eleves       = LS.get('eleves')       || [];
-  postes       = (LS.get('postes')      || []).sort((a,b)=>(a.order||0)-(b.order||0));
-  affectations = LS.get('affectations') || {};
-  refresh();
-  setSync('Local', false);
-}
-
-// ════════════════════════════════════════════════════
-//  NAVIGATION
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════
+//  SCREENS & TABS
+// ════════════════════════════════════
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  refresh();
+  refreshAll();
 }
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.admin-tab').forEach(t => t.style.display='none');
+
+function switchAdminTab(tabId, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.style.display = 'none');
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(tabId).style.display = 'block';
   btn.classList.add('active');
+  if (tabId === 'tab-amphi') renderAmphi();
 }
 
-// ════════════════════════════════════════════════════
-//  AUTH
-// ════════════════════════════════════════════════════
 async function tryAdmin() {
   const pin = document.getElementById('admin-pin-input').value;
   let stored = 'admin2024';
-  if (db) { try { const s = await db.ref(FB_ROOT+'/settings/pin').get(); if (s.val()) stored = s.val(); } catch(e){} }
-  else stored = LS.get('pin') || 'admin2024';
+  try { const s = await db.ref(FB_NS+'settings/pin').get(); if (s.val()) stored = s.val(); } catch(e){}
   if (pin === stored) {
     document.getElementById('admin-pin-input').value = '';
-    document.getElementById('pin-err').textContent = '';
+    document.getElementById('admin-pin-err').textContent = '';
     showScreen('screen-admin');
   } else {
-    document.getElementById('pin-err').textContent = 'Code incorrect.';
+    document.getElementById('admin-pin-err').textContent = 'Code incorrect.';
   }
 }
-async function changePin() {
-  const p1 = document.getElementById('new-pin').value;
-  const p2 = document.getElementById('confirm-pin').value;
-  if (!p1) { setStatus('pin-change-status','Entrez un code.','er'); return; }
-  if (p1 !== p2) { setStatus('pin-change-status','Les codes ne correspondent pas.','er'); return; }
-  if (db) await db.ref(FB_ROOT+'/settings/pin').set(p1);
-  else LS.set('pin', p1);
-  document.getElementById('new-pin').value = '';
-  document.getElementById('confirm-pin').value = '';
+
+// ════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════
+function postById(id) { return posts.find(p=>p.id===id); }
+function postName(id) { return postById(id)?.name || ''; }
+
+// Postes encore disponibles = non pris en choix définitif
+function availablePosts() {
+  const taken = new Set(Object.values(choices));
+  return posts.filter(p => !taken.has(p.id));
+}
+
+// ════════════════════════════════════
+//  REFRESH
+// ════════════════════════════════════
+function refreshAll() {
+  renderStudentsTable();
+  renderPostsTable();
+  renderAmphi();
+  renderLive();
+  renderLivePanel();
+}
+
+// ════════════════════════════════════
+//  RENDER STUDENTS (admin)
+// ════════════════════════════════════
+function renderStudentsTable() {
+  document.getElementById('students-count').textContent = students.length;
+  const el = document.getElementById('students-table');
+  if (!el) return;
+  if (!students.length) { el.innerHTML='<div class="empty">Aucun élève enregistré.</div>'; return; }
+  el.innerHTML = `<table class="zebra"><thead><tr><th>Rang</th><th>Nom</th><th>Choix</th><th></th></tr></thead><tbody>` +
+    students.map(s => {
+      const cid = choices[s.rank];
+      const cname = cid ? postName(cid) : '—';
+      return `<tr>
+        <td><span class="badge badge-gray">${s.rank}</span></td>
+        <td>${esc(s.name)}</td>
+        <td style="${cid?'color:var(--accent-dark);font-weight:600;':'color:var(--text3);font-style:italic;'}">${esc(cname)}</td>
+        <td><button class="del-btn" onclick="delStudent(${s.rank})">✕</button></td>
+      </tr>`;
+    }).join('') + `</tbody></table>`;
+}
+
+// ════════════════════════════════════
+//  RENDER POSTS (admin)
+// ════════════════════════════════════
+function renderPostsTable() {
+  document.getElementById('posts-count').textContent = posts.length;
+  const el = document.getElementById('posts-table');
+  if (!el) return;
+  if (!posts.length) { el.innerHTML='<div class="empty">Aucun poste enregistré.</div>'; return; }
+  const taken = new Set(Object.values(choices));
+  el.innerHTML = `<table class="zebra"><thead><tr><th>#</th><th>Univers</th><th>Sous-groupe</th><th>Poste</th><th>Statut</th><th></th></tr></thead><tbody>` +
+    posts.map((p,i) => {
+      const isTaken = taken.has(p.id);
+      return `<tr>
+        <td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px;">${i+1}</td>
+        <td style="font-size:12px;color:var(--text2);">${esc(p.univers||'')}</td>
+        <td style="font-size:12px;color:var(--text2);">${esc(p.sousGroupe||'')}</td>
+        <td style="${isTaken?'color:var(--text3);text-decoration:line-through;':''}">${esc(p.name)}</td>
+        <td>${isTaken?'<span class="badge badge-gray">Attribué</span>':'<span class="badge badge-green">Libre</span>'}</td>
+        <td><button class="del-btn" onclick="delPost('${p.id}')">✕</button></td>
+      </tr>`;
+    }).join('') + `</tbody></table>`;
+}
+
+// ════════════════════════════════════
+//  RENDER AMPHI
+// ════════════════════════════════════
+function renderAmphi() {
+  const el = document.getElementById('amphi-list');
+  if (!el) return;
+  if (!students.length) { el.innerHTML='<div class="empty">Aucun élève enregistré. Importez d\'abord les élèves.</div>'; return; }
+
+  const avail = availablePosts();
+
+  el.innerHTML = students.map(s => {
+    const choiceId = choices[s.rank];
+    const isDone = !!choiceId;
+    // Current = premier élève sans choix
+    const isCurrent = !isDone && !students.slice(0, students.indexOf(s)).some(prev => !choices[prev.rank]);
+
+    let rightCell;
+    if (isDone) {
+      const p = postById(choiceId);
+      rightCell = `
+        <div class="amphi-choice">${esc(p?.name||choiceId)}</div>
+        <div class="amphi-actions">
+          <button class="btn btn-sm btn-red" onclick="clearChoice(${s.rank})">Modifier</button>
+        </div>`;
+    } else {
+      // Build select with available posts
+      const opts = avail.map(p =>
+        `<option value="${p.id}">${esc(p.name)}${p.univers?` (${esc(p.univers)})`:''}</option>`
+      ).join('');
+      rightCell = `
+        <div class="amphi-select-wrap" style="grid-column:3;">
+          <select id="amphi-sel-${s.rank}">
+            <option value="">— Choisir un poste —</option>
+            ${opts}
+          </select>
+        </div>
+        <div class="amphi-actions">
+          <button class="btn btn-sm btn-green" onclick="saveChoice(${s.rank})">Valider</button>
+        </div>`;
+    }
+
+    return `<div class="amphi-row${isDone?' done':''}${isCurrent?' current':''}">
+      <div class="amphi-rank">${s.rank}</div>
+      <div class="amphi-name">${esc(s.name)}</div>
+      ${rightCell}
+    </div>`;
+  }).join('');
+}
+
+async function saveChoice(rank) {
+  const sel = document.getElementById('amphi-sel-'+rank);
+  if (!sel || !sel.value) { alert('Sélectionnez un poste.'); return; }
+  const postId = sel.value;
+  // Vérifier que le poste n'a pas déjà été pris entre-temps
+  const currentChoices = (await db.ref(FB_NS+'choices').get()).val() || {};
+  if (Object.values(currentChoices).includes(postId)) {
+    alert('Ce poste vient d\'être attribué à un autre élève. Veuillez en choisir un autre.');
+    refreshAll(); return;
+  }
+  await db.ref(FB_NS+'choices/'+rank).set(postId);
+}
+
+async function clearChoice(rank) {
+  if (!confirm('Modifier le choix de cet élève ?')) return;
+  await db.ref(FB_NS+'choices/'+rank).remove();
+}
+
+async function resetAllChoices() {
+  if (!confirm('Réinitialiser TOUS les choix ? Cette action est irréversible.')) return;
+  await db.ref(FB_NS+'choices').remove();
+}
+
+// ════════════════════════════════════
+//  RENDER LIVE
+// ════════════════════════════════════
+function renderLive() {
+  const el = document.getElementById('live-feed');
+  if (!el) return;
+  const q = (document.getElementById('live-search')?.value||'').toLowerCase();
+
+  const done = students.filter(s=>choices[s.rank]);
+  const doneSorted = [...done].sort((a,b)=>a.rank-b.rank);
+  const pending = students.filter(s=>!choices[s.rank]);
+
+  document.getElementById('live-done').textContent = done.length;
+  document.getElementById('live-remaining').textContent = Math.max(0, posts.length - done.length);
+
+  const allFiltered = [...students].filter(s => {
+    if (!q) return true;
+    const pname = postName(choices[s.rank]||'');
+    return s.name.toLowerCase().includes(q) || String(s.rank)===q || pname.toLowerCase().includes(q);
+  });
+
+  if (!allFiltered.length) { el.innerHTML='<div class="empty">Aucun résultat.</div>'; return; }
+
+  el.innerHTML = allFiltered.map(s => {
+    const cid = choices[s.rank];
+    const p = cid ? postById(cid) : null;
+    return `<div class="live-item">
+      <div class="live-rank">${s.rank}</div>
+      <div>
+        <div class="live-name">${esc(s.name)}</div>
+        ${p
+          ? `<div class="live-post">→ ${esc(p.name)}${p.univers?` <span style="font-size:10px;color:var(--text3);">(${esc(p.univers)})</span>`:''}</div>`
+          : `<div class="live-pending">En attente…</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════
+//  LIVE PANEL (postes disponibles)
+// ════════════════════════════════════
+const UNIVERS_COLORS = { 'AC':'#1a7a4a','ATE':'#1A5FA0','ASU':'#8a5a0a' };
+const UNIVERS_BG     = { 'AC':'#d4f0e2','ATE':'#D6E8F8','ASU':'#fdf0d5' };
+
+function renderLivePanel() {
+  const el = document.getElementById('live-panel-body');
+  if (!el) return;
+  if (!posts.length) { el.innerHTML='<div class="empty" style="padding:1.5rem;font-size:12px;">Aucun poste enregistré.</div>'; return; }
+
+  const taken = new Set(Object.values(choices));
+  const tree = {};
+  const seen = {};
+
+  posts.forEach(p => {
+    const u=p.univers||'Autre', sg=p.sousGroupe||'Autre';
+    if (!tree[u]) tree[u]={};
+    if (!tree[u][sg]) tree[u][sg]={total:0,remaining:0};
+    const key=u+'||'+sg+'||'+p.name;
+    if (!seen[key]) {
+      seen[key]=true;
+      // Count total exemplaires de ce nom
+      const total = posts.filter(pp=>pp.name===p.name).length;
+      const rem   = posts.filter(pp=>pp.name===p.name && !taken.has(pp.id)).length;
+      tree[u][sg].total+=total;
+      tree[u][sg].remaining+=rem;
+    }
+  });
+
+  let html='';
+  Object.keys(tree).sort().forEach(u => {
+    const sgs=tree[u];
+    const totalRem=Object.values(sgs).reduce((s,v)=>s+v.remaining,0);
+    const totalAll=Object.values(sgs).reduce((s,v)=>s+v.total,0);
+    const color=UNIVERS_COLORS[u]||'#5F5E5A', bgColor=UNIVERS_BG[u]||'#EDEAE3';
+    const isOpen=sessionStorage.getItem('live_panel_'+u)!=='false';
+    html+=`<div class="univers-block">
+      <button class="univers-header" onclick="toggleLivePanel('${esc(u)}')">
+        <span class="univers-name" style="color:${color};">${esc(u)}</span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span class="univers-badge" style="background:${bgColor};color:${color};">dispo : ${totalRem}/${totalAll}</span>
+          <span class="univers-chevron${isOpen?' open':''}" id="lchev-${esc(u)}">▼</span>
+        </span>
+      </button>
+      <div class="univers-body" id="lbody-${esc(u)}" style="display:${isOpen?'block':'none'};">`;
+    Object.keys(sgs).sort().forEach(sg => {
+      const {remaining,total}=sgs[sg];
+      const pct=total>0?Math.round((remaining/total)*100):0;
+      const zero=remaining===0;
+      html+=`<div class="sg-row${zero?' sg-zero':''}">
+        <div class="sg-label">
+          <span class="sg-name" title="${esc(sg)}">${esc(sg)}</span>
+          <span class="sg-count">${remaining}/${total}</span>
+        </div>
+        <div class="sg-bar-bg"><div class="sg-bar-fill" style="width:${pct}%;background:${zero?'var(--surface2)':color};"></div></div>
+      </div>`;
+    });
+    html+='</div></div>';
+  });
+  el.innerHTML=html;
+}
+
+function toggleLivePanel(u) {
+  const body=document.getElementById('lbody-'+u);
+  const chev=document.getElementById('lchev-'+u);
+  if(!body)return;
+  const isOpen=body.style.display!=='none';
+  body.style.display=isOpen?'none':'block';
+  if(chev)chev.classList.toggle('open',!isOpen);
+  sessionStorage.setItem('live_panel_'+u,String(!isOpen));
+}
+
+// ════════════════════════════════════
+//  EXPORT CSV
+// ════════════════════════════════════
+function exportChoicesCSV() {
+  const rows=[['Rang','Élève','Univers','Sous-groupe','Poste choisi']];
+  students.forEach(s=>{
+    const cid=choices[s.rank];
+    const p=cid?postById(cid):null;
+    rows.push([s.rank,s.name,p?.univers||'',p?.sousGroupe||'',p?.name||'(non choisi)']);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent('\uFEFF'+csv);
+  a.download='amphi-blanc-choix.csv';a.click();
+}
+
+// ════════════════════════════════════
+//  ADMIN ACTIONS
+// ════════════════════════════════════
+async function importStudents(){
+  const lines=document.getElementById('students-bulk').value.trim().split('\n').filter(l=>l.trim());
+  const toImport=[];
+  for(const line of lines){
+    const parts=line.split(';');if(parts.length<2)continue;
+    const rank=parseInt(parts[0].trim()),name=parts.slice(1).join(';').trim();
+    if(!rank||!name)continue;toImport.push({rank,name});
+  }
+  if(!toImport.length){setStatus('students-status','Format invalide.','err');return;}
+  const u={};toImport.forEach(s=>{u[FB_NS+'students/'+s.rank]=s;});
+  await db.ref().update(u);
+  document.getElementById('students-bulk').value='';
+  setStatus('students-status',`${toImport.length} élève(s) importé(s).`,'ok');
+}
+
+async function importPosts(){
+  const lines=document.getElementById('posts-bulk').value.trim().split('\n').filter(l=>l.trim());
+  const toImport=[];
+  const maxOrder=posts.length?Math.max(...posts.map(p=>p.order||0)):0;
+  lines.forEach((line,idx)=>{
+    const parts=line.split(';');
+    let univers='',sousGroupe='',name='';
+    if(parts.length>=3){univers=parts[0].trim();sousGroupe=parts[1].trim();name=parts.slice(2).join(';').trim();}
+    else if(parts.length===2){sousGroupe=parts[0].trim();name=parts[1].trim();}
+    else{name=parts[0].trim();}
+    if(!name)return;
+    toImport.push({id:'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),name,univers,sousGroupe,order:maxOrder+idx+1});
+  });
+  if(!toImport.length){setStatus('posts-status','Aucun poste valide.','err');return;}
+  const u={};toImport.forEach(p=>{u[FB_NS+'posts/'+p.id]=p;});
+  await db.ref().update(u);
+  document.getElementById('posts-bulk').value='';
+  setStatus('posts-status',`${toImport.length} poste(s) importé(s).`,'ok');
+}
+
+async function clearStudents(){if(!confirm('Effacer tous les élèves ?'))return;await db.ref(FB_NS+'students').remove();}
+async function clearPosts()   {if(!confirm('Effacer tous les postes ?'))return; await db.ref(FB_NS+'posts').remove();}
+async function delStudent(rank){await db.ref(FB_NS+'students/'+rank).remove();}
+async function delPost(id)    {await db.ref(FB_NS+'posts/'+id).remove();}
+
+async function changePin(){
+  const p1=document.getElementById('new-pin').value,p2=document.getElementById('confirm-pin').value;
+  if(!p1){setStatus('pin-change-status','Entrez un code.','err');return;}
+  if(p1!==p2){setStatus('pin-change-status','Les codes ne correspondent pas.','err');return;}
+  await db.ref(FB_NS+'settings/pin').set(p1);
+  document.getElementById('new-pin').value='';document.getElementById('confirm-pin').value='';
   setStatus('pin-change-status','Code modifié.','ok');
 }
 
-// ════════════════════════════════════════════════════
-//  LOGIQUE — postes disponibles
-// ════════════════════════════════════════════════════
-function postesDisponibles() {
-  // IDs déjà pris
-  const pris = new Set(Object.values(affectations).filter(Boolean));
-  return postes.filter(p => !pris.has(p.id));
-}
+// ════════════════════════════════════
+//  COLOR PICKER
+// ════════════════════════════════════
+const PRESETS = [
+  {hue:220,label:'Bleu'},
+  {hue:160,label:'Vert'},
+  {hue:25,label:'Orange'},
+  {hue:280,label:'Violet'},
+  {hue:340,label:'Rose'},
+  {hue:195,label:'Cyan'},
+  {hue:45,label:'Ambre'},
+  {hue:0,label:'Rouge'},
+];
 
-function nomPoste(id) {
-  return postes.find(p => p.id === id)?.nom || '';
-}
-
-// ════════════════════════════════════════════════════
-//  AFFECTATION
-// ════════════════════════════════════════════════════
-async function setAffectation(rang, posteId) {
-  if (db) {
-    if (posteId) {
-      await db.ref(`${FB_ROOT}/affectations/${rang}`).set(posteId);
-    } else {
-      await db.ref(`${FB_ROOT}/affectations/${rang}`).remove();
-    }
-  } else {
-    if (posteId) affectations[rang] = posteId;
-    else delete affectations[rang];
-    LS.set('affectations', affectations);
-    refresh();
-  }
-}
-
-// ════════════════════════════════════════════════════
-//  REFRESH GLOBAL
-// ════════════════════════════════════════════════════
-function refresh() {
-  renderAdminEleves();
-  renderAdminPostes();
-  renderResultats();
-  renderAmphiTable();
-  updateStats();
-}
-
-// ════════════════════════════════════════════════════
-//  STATS
-// ════════════════════════════════════════════════════
-function updateStats() {
-  const nbAff = Object.keys(affectations).filter(k => affectations[k]).length;
-  const nbTotal = eleves.length;
-  const nbRestants = postesDisponibles().length;
-  document.getElementById('stat-affectes').textContent  = nbAff;
-  document.getElementById('stat-attente').textContent   = Math.max(0, nbTotal - nbAff);
-  document.getElementById('stat-postes').textContent    = nbRestants;
-  const pct = nbTotal > 0 ? Math.round((nbAff / nbTotal) * 100) : 0;
-  document.getElementById('progress-fill').style.width  = pct + '%';
-  document.getElementById('progress-pct').textContent   = pct + '%';
-}
-
-// ════════════════════════════════════════════════════
-//  RENDER — AMPHI
-// ════════════════════════════════════════════════════
-function renderAmphiTable() {
-  const el = document.getElementById('amphi-table');
-  if (!el) return;
-  if (!eleves.length) { el.innerHTML = '<div class="empty">Aucun élève enregistré. Configurez la liste dans l\'administration.</div>'; return; }
-
-  const q = (document.getElementById('amphi-search')?.value || '').toLowerCase();
-  const filtered = eleves.filter(e =>
-    !q || String(e.rang) === q.trim() || e.nom.toLowerCase().includes(q)
-  );
-  if (!filtered.length) { el.innerHTML = '<div class="empty">Aucun résultat.</div>'; return; }
-
-  const dispo = postesDisponibles();
-
-  const rows = filtered.map(e => {
-    const affId = affectations[e.rang] || '';
-    const affNom = affId ? nomPoste(affId) : '';
-    const isAff = !!affId;
-
-    // Options : poste actuel (même s'il est "pris") + postes disponibles
-    let options = `<option value="">— Choisir un poste —</option>`;
-    // Si un poste est déjà affecté à cet élève, l'afficher en premier
-    if (affId) {
-      options += `<option value="${affId}" selected>${esc(affNom)}</option>`;
-    }
-    // Ajouter tous les postes disponibles (non encore pris)
-    dispo.forEach(p => {
-      if (p.id !== affId) { // ne pas dupliquer si déjà affiché
-        options += `<option value="${p.id}">${esc(p.nom)}</option>`;
-      }
-    });
-
-    const rangClass = e.rang <= 3 ? 'rang top3' : 'rang';
-
-    return `<tr>
-      <td><div class="td-inner"><span class="${rangClass}">${e.rang}</span></div></td>
-      <td><div class="td-inner"><span class="nom">${esc(e.nom)}</span></div></td>
-      <td style="width:100%">
-        <div class="td-inner" style="gap:10px;">
-          <select class="select-poste${isAff?' chosen':''}"
-            onchange="handleSelectChange(${e.rang}, this)">
-            ${options}
-          </select>
-          ${isAff ? `<button class="btn btn-sm btn-red" onclick="setAffectation(${e.rang},'')">✕</button>` : ''}
-        </div>
-      </td>
-      <td><div class="td-inner">
-        <span class="pill ${isAff?'pill-done':'pill-pending'}">${isAff?'✓ Affecté':'En attente'}</span>
-      </div></td>
-    </tr>`;
+function buildColorSwatches() {
+  const container = document.getElementById('color-swatches');
+  container.innerHTML = PRESETS.map(p => {
+    const col = `hsl(${p.hue},60%,42%)`;
+    return `<div class="swatch${p.hue===currentHue?' active':''}" title="${p.label}"
+      style="background:${col};" onclick="applyHue(${p.hue},true);syncSwatches(${p.hue});"></div>`;
   }).join('');
-
-  el.innerHTML = `<table>
-    <thead><tr><th style="width:50px;">Rang</th><th style="width:200px;">Élève</th><th>Poste affecté</th><th style="width:110px;">Statut</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
 }
 
-function handleSelectChange(rang, sel) {
-  const posteId = sel.value;
-  setAffectation(rang, posteId);
-}
-
-// ════════════════════════════════════════════════════
-//  RENDER — ADMIN ÉLÈVES
-// ════════════════════════════════════════════════════
-function renderAdminEleves() {
-  document.getElementById('eleves-count').textContent = eleves.length;
-  const el = document.getElementById('eleves-table');
-  if (!el) return;
-  if (!eleves.length) { el.innerHTML = '<div class="empty">Aucun élève.</div>'; return; }
-  el.innerHTML = `<table><thead><tr><th>Rang</th><th>Nom</th><th></th></tr></thead><tbody>` +
-    eleves.map(e => `<tr>
-      <td><div class="td-inner"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);">${e.rang}</span></div></td>
-      <td><div class="td-inner">${esc(e.nom)}</div></td>
-      <td><div class="td-inner"><button class="del-btn" onclick="delEleve(${e.rang})">✕</button></div></td>
-    </tr>`).join('') + `</tbody></table>`;
-}
-
-// ════════════════════════════════════════════════════
-//  RENDER — ADMIN POSTES
-// ════════════════════════════════════════════════════
-function renderAdminPostes() {
-  document.getElementById('postes-count').textContent = postes.length;
-  const el = document.getElementById('postes-table');
-  if (!el) return;
-  if (!postes.length) { el.innerHTML = '<div class="empty">Aucun poste.</div>'; return; }
-
-  // Grouper par nom pour afficher le décompte
-  const grouped = {};
-  postes.forEach(p => { grouped[p.nom] = (grouped[p.nom]||0)+1; });
-  const uniqueNames = [...new Set(postes.map(p=>p.nom))];
-
-  el.innerHTML = `<table><thead><tr><th>#</th><th>Poste</th><th>Exemplaires</th><th></th></tr></thead><tbody>` +
-    uniqueNames.map((nom,i) => `<tr>
-      <td><div class="td-inner"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);">${i+1}</span></div></td>
-      <td><div class="td-inner">${esc(nom)}</div></td>
-      <td><div class="td-inner"><span class="badge">${grouped[nom]}</span></div></td>
-      <td><div class="td-inner"><button class="del-btn" onclick="delPosteByNom('${esc(nom)}')">✕</button></div></td>
-    </tr>`).join('') + `</tbody></table>`;
-}
-
-// ════════════════════════════════════════════════════
-//  RENDER — RÉSULTATS ADMIN
-// ════════════════════════════════════════════════════
-function renderResultats() {
-  const el = document.getElementById('resultats-table');
-  if (!el) return;
-  const aff = eleves.filter(e => affectations[e.rang]);
-  if (!aff.length) { el.innerHTML = '<div class="empty">Aucune affectation enregistrée.</div>'; return; }
-  el.innerHTML = `<table><thead><tr><th>Rang</th><th>Élève</th><th>Poste affecté</th></tr></thead><tbody>` +
-    aff.map(e => `<tr>
-      <td><div class="td-inner"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);">${e.rang}</span></div></td>
-      <td><div class="td-inner">${esc(e.nom)}</div></td>
-      <td><div class="td-inner" style="color:var(--gold);font-weight:500;">${esc(nomPoste(affectations[e.rang]))}</div></td>
-    </tr>`).join('') + `</tbody></table>`;
-}
-
-// ════════════════════════════════════════════════════
-//  IMPORT / DELETE
-// ════════════════════════════════════════════════════
-async function importEleves() {
-  const lines = document.getElementById('eleves-bulk').value.trim().split('\n').filter(l=>l.trim());
-  const toImport = [];
-  for (const line of lines) {
-    const parts = line.split(';'); if (parts.length < 2) continue;
-    const rang = parseInt(parts[0].trim()), nom = parts.slice(1).join(';').trim();
-    if (!rang || !nom) continue;
-    toImport.push({rang, nom});
-  }
-  if (!toImport.length) { setStatus('eleves-status','Format invalide.','er'); return; }
-  if (db) {
-    const u = {};
-    toImport.forEach(e => { u[`${FB_ROOT}/eleves/${e.rang}`] = e; });
-    await db.ref().update(u);
-  } else {
-    toImport.forEach(ne => {
-      const i = eleves.findIndex(e=>e.rang===ne.rang);
-      if (i>=0) eleves[i]=ne; else eleves.push(ne);
-    });
-    eleves.sort((a,b)=>a.rang-b.rang);
-    LS.set('eleves', eleves);
-    refresh();
-  }
-  document.getElementById('eleves-bulk').value = '';
-  setStatus('eleves-status', `${toImport.length} élève(s) importé(s).`, 'ok');
-}
-
-async function importPostes() {
-  const lines = document.getElementById('postes-bulk').value.trim().split('\n').filter(l=>l.trim());
-  const toImport = [];
-  const maxOrder = postes.length ? Math.max(...postes.map(p=>p.order||0)) : 0;
-  lines.forEach((line, idx) => {
-    const nom = line.trim(); if (!nom) return;
-    toImport.push({id:'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,6), nom, order: maxOrder+idx+1});
+function syncSwatches(hue) {
+  document.querySelectorAll('.swatch').forEach((s,i) => {
+    s.classList.toggle('active', PRESETS[i]?.hue === parseInt(hue));
   });
-  if (!toImport.length) { setStatus('postes-status','Aucun poste valide.','er'); return; }
-  if (db) {
-    const u = {}; toImport.forEach(p => { u[`${FB_ROOT}/postes/${p.id}`] = p; });
-    await db.ref().update(u);
-  } else {
-    postes = [...postes, ...toImport].sort((a,b)=>(a.order||0)-(b.order||0));
-    LS.set('postes', postes); refresh();
-  }
-  document.getElementById('postes-bulk').value = '';
-  setStatus('postes-status', `${toImport.length} poste(s) importé(s).`, 'ok');
+  document.getElementById('hue-slider').value = hue;
+  document.getElementById('hue-value').textContent = hue+'°';
 }
 
-async function clearEleves() {
-  if (!confirm('Effacer tous les élèves ?')) return;
-  if (db) await db.ref(`${FB_ROOT}/eleves`).remove();
-  else { eleves=[]; LS.set('eleves',[]); refresh(); }
-}
-async function clearPostes() {
-  if (!confirm('Effacer tous les postes ?')) return;
-  if (db) await db.ref(`${FB_ROOT}/postes`).remove();
-  else { postes=[]; LS.set('postes',[]); refresh(); }
-}
-async function delEleve(rang) {
-  if (db) await db.ref(`${FB_ROOT}/eleves/${rang}`).remove();
-  else { eleves=eleves.filter(e=>e.rang!==rang); LS.set('eleves',eleves); refresh(); }
-}
-async function delPosteByNom(nom) {
-  const toDelete = postes.filter(p=>p.nom===nom);
-  if (!confirm(`Supprimer tous les exemplaires de "${nom}" (${toDelete.length}) ?`)) return;
-  if (db) {
-    const u={};
-    toDelete.forEach(p=>{ u[`${FB_ROOT}/postes/${p.id}`]=null; });
-    await db.ref().update(u);
-  } else {
-    postes=postes.filter(p=>p.nom!==nom); LS.set('postes',postes); refresh();
-  }
-}
-async function resetAffectations() {
-  if (!confirm('Réinitialiser toutes les affectations ?')) return;
-  if (db) await db.ref(`${FB_ROOT}/affectations`).remove();
-  else { affectations={}; LS.set('affectations',{}); refresh(); }
+async function applyHue(hue, save) {
+  hue = parseInt(hue);
+  currentHue = hue;
+  document.documentElement.style.setProperty('--hue', hue);
+  if (save && db) await db.ref(FB_NS+'settings/hue').set(hue);
+  syncSwatches(hue);
 }
 
-// ════════════════════════════════════════════════════
-//  EXPORT CSV
-// ════════════════════════════════════════════════════
-function exportCSV() {
-  const rows = [['Rang','Élève','Poste affecté']];
-  eleves.forEach(e => {
-    rows.push([e.rang, e.nom, nomPoste(affectations[e.rang])||'']);
-  });
-  const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent('\uFEFF'+csv);
-  a.download = 'affectations-amphi-blanc.csv';
-  a.click();
+// ════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════
+function setStatus(id,msg,cls){
+  const el=document.getElementById(id);if(!el)return;
+  el.textContent=msg;el.className='status '+cls;
+  setTimeout(()=>{el.textContent='';},4000);
 }
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// ════════════════════════════════════════════════════
-//  UTILITAIRES
-// ════════════════════════════════════════════════════
-function setStatus(id, msg, cls) {
-  const el = document.getElementById(id); if (!el) return;
-  el.textContent = msg; el.className = 'status-msg '+cls;
-  setTimeout(()=>{ el.textContent=''; }, 4000);
-}
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
+// ════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════
+buildColorSwatches();
 initFirebase();
 </script>
 </body>
