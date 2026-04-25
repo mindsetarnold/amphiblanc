@@ -2,6 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Amphi Blanc — Promotion 50</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -267,15 +271,14 @@ code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--sur
 <body>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDjAt_9gox702UaXf7-EYGojv-nbfYwYuY",
-  authDomain: "amphi-blanc---voeux-finaux.firebaseapp.com",
-  databaseURL: "https://amphi-blanc---voeux-finaux-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "amphi-blanc---voeux-finaux",
-  storageBucket: "amphi-blanc---voeux-finaux.firebasestorage.app",
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDjAt_9gox702UaXf7-EYGojv-nbfYwYuY",
+  authDomain:        "amphi-blanc---voeux-finaux.firebaseapp.com",
+  databaseURL:       "https://amphi-blanc---voeux-finaux-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:         "amphi-blanc---voeux-finaux",
+  storageBucket:     "amphi-blanc---voeux-finaux.firebasestorage.app",
   messagingSenderId: "91659498687",
-  appId: "1:91659498687:web:33b4a83265eaaef4e5c20a",
-  measurementId: "G-S6P9DLTJ2N"
+  appId:             "1:91659498687:web:33b4a83265eaaef4e5c20a"
 };
 // Namespace Firebase séparé pour ne pas interférer avec la plateforme de vœux
 const FB_NS = 'amphi/';
