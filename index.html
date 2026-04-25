@@ -480,7 +480,7 @@ let currentHue = 220;
 // ════════════════════════════════════
 function initFirebase() {
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
+    firebase.initializeApp(firebaseConfig);
     db = firebase.database();
     setupListeners();
   } catch(e) { setSyncLabel('Erreur', false); }
