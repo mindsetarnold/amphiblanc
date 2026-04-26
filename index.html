@@ -261,6 +261,120 @@ code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--sur
 .live-table .choice-cell { color: var(--accent-dark); font-weight: 600; }
 .live-table .pending-cell { color: var(--text3); font-style: italic; }
 
+/* ── DÉCOMPTE 3-COLONNES ── */
+.decompte-header-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.decompte-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 900px) { .decompte-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .decompte-grid { grid-template-columns: 1fr; } }
+
+.decompte-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.decompte-col-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.decompte-col-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+.decompte-col-badge {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+.decompte-sg-row {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.decompte-sg-row:last-child { border-bottom: none; }
+.decompte-sg-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.decompte-sg-name {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+}
+.decompte-sg-count {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  margin-left: 8px;
+}
+.decompte-bar-bg { height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+.decompte-bar-fill { height: 100%; border-radius: 99px; transition: width .5s ease; }
+.decompte-sg-zero .decompte-sg-name { color: var(--text3); text-decoration: line-through; }
+.decompte-sg-zero .decompte-sg-count { color: var(--text3); }
+
+/* ── URL LINK BUTTON ── */
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-lt);
+  border: 1px solid var(--accent-mid);
+  border-radius: 6px;
+  padding: 3px 9px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+  font-family: 'Syne', sans-serif;
+}
+.link-btn:hover { background: var(--accent-mid); color: var(--accent-dark); }
+.link-btn svg { flex-shrink: 0; }
+
+/* ── URL MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.hidden { display: none; }
+.modal-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+}
+.modal-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.modal-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 1.2rem; }
+.modal-actions { display: flex; gap: 8px; margin-top: 1rem; justify-content: flex-end; }
+
 @media (max-width: 560px) {
   .home-grid { grid-template-columns: 1fr; }
   .amphi-row { grid-template-columns: 40px 1fr; }
@@ -280,7 +394,6 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "91659498687",
   appId:             "1:91659498687:web:33b4a83265eaaef4e5c20a"
 };
-// Namespace Firebase séparé pour ne pas interférer avec la plateforme de vœux
 const FB_NS = 'amphi/';
 const FIREBASE_CONFIGURED = true;
 </script>
@@ -298,6 +411,23 @@ const FIREBASE_CONFIGURED = true;
     <div class="sync-dot" id="sync-dot" style="background:var(--text3)"></div>
     <span id="sync-label">Connexion…</span>
     <button class="btn btn-sm" onclick="showScreen('screen-home')" style="margin-left:8px;">Accueil</button>
+  </div>
+</div>
+
+<!-- ══ URL MODAL ══ -->
+<div class="modal-overlay hidden" id="url-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="url-modal-title">Lien vers la fiche de poste</div>
+    <div class="modal-subtitle" id="url-modal-sub">Collez l'URL de la fiche de poste.</div>
+    <div class="field">
+      <label>URL de la fiche de poste</label>
+      <input type="url" id="url-modal-input" placeholder="https://…" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-sm btn-red" id="url-modal-delete" onclick="deletePostUrl()">Supprimer le lien</button>
+      <button class="btn btn-sm" onclick="closeUrlModal()">Annuler</button>
+      <button class="btn btn-sm btn-accent" onclick="savePostUrl()">Enregistrer</button>
+    </div>
   </div>
 </div>
 
@@ -452,6 +582,7 @@ const FIREBASE_CONFIGURED = true;
     <!-- Onglets live -->
     <div class="live-tabs">
       <button class="live-tab active" data-tab="live-tab-choices" onclick="switchLiveTab('live-tab-choices',this)">Choix des élèves</button>
+      <button class="live-tab" data-tab="live-tab-decompte" onclick="switchLiveTab('live-tab-decompte',this)">Décompte des postes</button>
       <button class="live-tab" data-tab="live-tab-posts" onclick="switchLiveTab('live-tab-posts',this)">Liste des postes disponibles</button>
     </div>
 
@@ -479,7 +610,24 @@ const FIREBASE_CONFIGURED = true;
       </div>
     </div>
 
-    <!-- Onglet 2 : Liste des postes disponibles -->
+    <!-- Onglet 2 : Décompte des postes (3 colonnes) -->
+    <div id="live-tab-decompte" class="live-tab-content">
+      <div class="decompte-header-bar">
+        <div class="live-stat" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);">
+          <div class="live-stat-label">Choix effectués</div>
+          <div class="live-stat-value" id="decompte-done">0</div>
+        </div>
+        <div class="live-stat" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);">
+          <div class="live-stat-label">Postes restants</div>
+          <div class="live-stat-value" id="decompte-remaining">—</div>
+        </div>
+      </div>
+      <div class="decompte-grid" id="decompte-grid">
+        <div class="empty" style="grid-column:1/-1;">Chargement…</div>
+      </div>
+    </div>
+
+    <!-- Onglet 3 : Liste des postes disponibles -->
     <div id="live-tab-posts" class="live-tab-content">
       <div class="live-stats" style="margin-bottom:1.5rem;">
         <div class="live-stat"><div class="live-stat-label">Choix effectués</div><div class="live-stat-value" id="live-done">0</div></div>
@@ -504,11 +652,12 @@ const FIREBASE_CONFIGURED = true;
 // ════════════════════════════════════
 //  STATE
 // ════════════════════════════════════
-let students = [];  // [{rank, name}]
-let posts    = [];  // [{id, name, univers, sousGroupe, order}]
-let choices  = {};  // { rank: postId }
+let students = [];
+let posts    = [];
+let choices  = {};
 let db       = null;
 let currentHue = 220;
+let urlModalPostId = null;
 
 // ════════════════════════════════════
 //  FIREBASE
@@ -528,7 +677,6 @@ function setSyncLabel(t, ok) {
 
 function setupListeners() {
   const paths = ['students','posts','choices','settings'];
-  let loaded = new Set();
   paths.forEach(path => {
     db.ref(FB_NS+path).on('value', snap => {
       const v = snap.val();
@@ -539,7 +687,6 @@ function setupListeners() {
         if (v?.hue !== undefined) applyHue(v.hue, false);
         if (v?.hue !== undefined) { document.getElementById('hue-slider').value = v.hue; document.getElementById('hue-value').textContent = v.hue+'°'; }
       }
-      loaded.add(path);
       refreshAll();
       setSyncLabel('Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), true);
     });
@@ -557,6 +704,7 @@ function showScreen(id) {
     renderLivePostsList();
     renderLivePanel();
     renderLiveStats();
+    renderDecompte();
   } else if (id === 'screen-admin') {
     renderStudentsTable();
   }
@@ -591,7 +739,6 @@ async function tryAdmin() {
 function postById(id) { return posts.find(p=>p.id===id); }
 function postName(id) { return postById(id)?.name || ''; }
 
-// Postes encore disponibles = non pris en choix définitif
 function availablePosts() {
   const taken = new Set(Object.values(choices));
   return posts.filter(p => !taken.has(p.id));
@@ -607,23 +754,22 @@ function activeScreen() {
 
 function refreshAll() {
   const scr = activeScreen();
-  // Admin screens
   if (scr === 'screen-admin') {
     const tab = document.querySelector('.admin-tab[style*="block"]');
     const tabId = tab ? tab.id : 'tab-students';
     if (tabId === 'tab-students') renderStudentsTable();
     else if (tabId === 'tab-posts') renderPostsTable();
     else if (tabId === 'tab-amphi') renderAmphi();
-    // settings: nothing to refresh
   }
-  // Live screen
   if (scr === 'screen-live') {
     const liveTab = document.querySelector('.live-tab.active');
     const liveTabId = liveTab ? liveTab.dataset.tab : 'live-tab-choices';
     if (liveTabId === 'live-tab-choices') renderLive();
+    else if (liveTabId === 'live-tab-decompte') renderDecompte();
     else if (liveTabId === 'live-tab-posts') renderLivePostsList();
     renderLivePanel();
     renderLiveStats();
+    renderDecompteStats();
   }
 }
 
@@ -649,7 +795,7 @@ function renderStudentsTable() {
 }
 
 // ════════════════════════════════════
-//  RENDER POSTS (admin)
+//  RENDER POSTS (admin) — with URL edit button
 // ════════════════════════════════════
 function renderPostsTable() {
   document.getElementById('posts-count').textContent = posts.length;
@@ -657,19 +803,70 @@ function renderPostsTable() {
   if (!el) return;
   if (!posts.length) { el.innerHTML='<div class="empty">Aucun poste enregistré.</div>'; return; }
   const taken = new Set(Object.values(choices));
-  el.innerHTML = `<table class="zebra"><thead><tr><th>#</th><th>Univers</th><th>Sous-groupe</th><th>Poste</th><th>Statut</th><th></th></tr></thead><tbody>` +
+  el.innerHTML = `<table class="zebra"><thead><tr><th>#</th><th>Univers</th><th>Sous-groupe</th><th>Poste</th><th>Fiche de poste</th><th>Statut</th><th></th></tr></thead><tbody>` +
     posts.map((p,i) => {
       const isTaken = taken.has(p.id);
+      const hasUrl = !!p.url;
+      const urlCell = hasUrl
+        ? `<span style="display:inline-flex;align-items:center;gap:6px;">
+             <span style="font-size:11px;color:var(--green);">✓ Lien enregistré</span>
+             <button class="btn btn-sm" style="height:24px;padding:0 8px;font-size:11px;" onclick="openUrlModal('${esc(p.id)}')">Modifier</button>
+           </span>`
+        : `<button class="btn btn-sm btn-accent" style="height:26px;padding:0 10px;font-size:11px;" onclick="openUrlModal('${esc(p.id)}')">+ Ajouter un lien</button>`;
       return `<tr>
         <td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px;">${i+1}</td>
         <td style="font-size:12px;color:var(--text2);">${esc(p.univers||'')}</td>
         <td style="font-size:12px;color:var(--text2);">${esc(p.sousGroupe||'')}</td>
         <td style="${isTaken?'color:var(--text3);text-decoration:line-through;':''}">${esc(p.name)}</td>
+        <td>${urlCell}</td>
         <td>${isTaken?'<span class="badge badge-gray">Attribué</span>':'<span class="badge badge-green">Libre</span>'}</td>
         <td><button class="del-btn" onclick="delPost('${p.id}')">✕</button></td>
       </tr>`;
     }).join('') + `</tbody></table>`;
 }
+
+// ════════════════════════════════════
+//  URL MODAL
+// ════════════════════════════════════
+function openUrlModal(postId) {
+  urlModalPostId = postId;
+  const p = postById(postId);
+  if (!p) return;
+  document.getElementById('url-modal-title').textContent = p.name;
+  document.getElementById('url-modal-sub').textContent = 'Entrez l\'URL de la fiche de poste pour "' + p.name + '".';
+  document.getElementById('url-modal-input').value = p.url || '';
+  document.getElementById('url-modal-delete').style.display = p.url ? 'inline-flex' : 'none';
+  document.getElementById('url-modal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('url-modal-input').focus(), 50);
+}
+
+function closeUrlModal() {
+  document.getElementById('url-modal').classList.add('hidden');
+  urlModalPostId = null;
+}
+
+async function savePostUrl() {
+  if (!urlModalPostId) return;
+  const url = document.getElementById('url-modal-input').value.trim();
+  if (url && !url.startsWith('http')) {
+    alert('L\'URL doit commencer par http:// ou https://');
+    return;
+  }
+  await db.ref(FB_NS+'posts/'+urlModalPostId+'/url').set(url || null);
+  closeUrlModal();
+}
+
+async function deletePostUrl() {
+  if (!urlModalPostId) return;
+  if (!confirm('Supprimer le lien de ce poste ?')) return;
+  await db.ref(FB_NS+'posts/'+urlModalPostId+'/url').remove();
+  closeUrlModal();
+}
+
+// Close modal on overlay click
+document.getElementById('url-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeUrlModal();
+});
 
 // ════════════════════════════════════
 //  RENDER AMPHI
@@ -684,7 +881,6 @@ function renderAmphi() {
   el.innerHTML = students.map(s => {
     const choiceId = choices[s.rank];
     const isDone = !!choiceId;
-    // Current = premier élève sans choix
     const isCurrent = !isDone && !students.slice(0, students.indexOf(s)).some(prev => !choices[prev.rank]);
 
     let rightCell;
@@ -696,7 +892,6 @@ function renderAmphi() {
           <button class="btn btn-sm btn-red" onclick="clearChoice(${s.rank})">Modifier</button>
         </div>`;
     } else {
-      // Build select with available posts
       const opts = avail.map(p =>
         `<option value="${p.id}">${esc(p.name)}${p.univers?` (${esc(p.univers)})`:''}</option>`
       ).join('');
@@ -724,7 +919,6 @@ async function saveChoice(rank) {
   const sel = document.getElementById('amphi-sel-'+rank);
   if (!sel || !sel.value) { alert('Sélectionnez un poste.'); return; }
   const postId = sel.value;
-  // Vérifier que le poste n'a pas déjà été pris entre-temps
   const currentChoices = (await db.ref(FB_NS+'choices').get()).val() || {};
   if (Object.values(currentChoices).includes(postId)) {
     alert('Ce poste vient d\'être attribué à un autre élève. Veuillez en choisir un autre.');
@@ -752,6 +946,7 @@ function switchLiveTab(tabId, btn) {
   document.getElementById(tabId).classList.add('active');
   btn.classList.add('active');
   if (tabId === 'live-tab-choices') { renderLive(); renderLivePanel(); }
+  else if (tabId === 'live-tab-decompte') { renderDecompte(); }
   else if (tabId === 'live-tab-posts') { renderLivePostsList(); renderLiveStats(); }
 }
 
@@ -760,6 +955,15 @@ function renderLiveStats() {
   const rem  = Math.max(0, posts.length - done);
   const dEl = document.getElementById('live-done');
   const rEl = document.getElementById('live-remaining');
+  if (dEl) dEl.textContent = done;
+  if (rEl) rEl.textContent = rem;
+}
+
+function renderDecompteStats() {
+  const done = Object.keys(choices).length;
+  const rem  = Math.max(0, posts.length - done);
+  const dEl = document.getElementById('decompte-done');
+  const rEl = document.getElementById('decompte-remaining');
   if (dEl) dEl.textContent = done;
   if (rEl) rEl.textContent = rem;
 }
@@ -796,7 +1000,80 @@ function renderLive() {
 }
 
 // ════════════════════════════════════
-//  RENDER LISTE POSTES DISPONIBLES
+//  RENDER DÉCOMPTE 3 COLONNES
+// ════════════════════════════════════
+const UNIVERS_COLORS = { 'AC':'#1a7a4a','ATE':'#1A5FA0','ASU':'#8a5a0a' };
+const UNIVERS_BG     = { 'AC':'#d4f0e2','ATE':'#D6E8F8','ASU':'#fdf0d5' };
+
+function renderDecompte() {
+  const el = document.getElementById('decompte-grid');
+  if (!el) return;
+  renderDecompteStats();
+
+  if (!posts.length) {
+    el.innerHTML='<div class="empty" style="grid-column:1/-1;">Aucun poste enregistré.</div>';
+    return;
+  }
+
+  const taken = new Set(Object.values(choices));
+  const tree = {};
+  const seen = {};
+
+  posts.forEach(p => {
+    const u = p.univers || 'Autre';
+    const sg = p.sousGroupe || 'Autre';
+    if (!tree[u]) tree[u] = {};
+    if (!tree[u][sg]) tree[u][sg] = { total: 0, remaining: 0 };
+    const key = u + '||' + sg + '||' + p.name;
+    if (!seen[key]) {
+      seen[key] = true;
+      const total = posts.filter(pp => pp.name === p.name && pp.univers === u).length;
+      const rem   = posts.filter(pp => pp.name === p.name && pp.univers === u && !taken.has(pp.id)).length;
+      tree[u][sg].total += total;
+      tree[u][sg].remaining += rem;
+    }
+  });
+
+  const univers = Object.keys(tree).sort();
+  let html = '';
+
+  univers.forEach(u => {
+    const sgs = tree[u];
+    const totalRem = Object.values(sgs).reduce((s, v) => s + v.remaining, 0);
+    const totalAll = Object.values(sgs).reduce((s, v) => s + v.total, 0);
+    const color = UNIVERS_COLORS[u] || '#5F5E5A';
+    const bgColor = UNIVERS_BG[u] || '#EDEAE3';
+
+    let sgHtml = '';
+    Object.keys(sgs).sort().forEach(sg => {
+      const { remaining, total } = sgs[sg];
+      const pct = total > 0 ? Math.round((remaining / total) * 100) : 0;
+      const zero = remaining === 0;
+      sgHtml += `<div class="decompte-sg-row${zero ? ' decompte-sg-zero' : ''}">
+        <div class="decompte-sg-label">
+          <span class="decompte-sg-name">${esc(sg)}</span>
+          <span class="decompte-sg-count">${remaining}/${total}</span>
+        </div>
+        <div class="decompte-bar-bg">
+          <div class="decompte-bar-fill" style="width:${pct}%;background:${zero ? 'var(--surface2)' : color};"></div>
+        </div>
+      </div>`;
+    });
+
+    html += `<div class="decompte-col">
+      <div class="decompte-col-header" style="background:${bgColor};">
+        <span class="decompte-col-title" style="color:${color};">${esc(u)}</span>
+        <span class="decompte-col-badge" style="background:${color}20;color:${color};">dispo : ${totalRem}/${totalAll}</span>
+      </div>
+      ${sgHtml}
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ════════════════════════════════════
+//  RENDER LISTE POSTES DISPONIBLES — with URL link button
 // ════════════════════════════════════
 function renderLivePostsList() {
   const el = document.getElementById('live-posts-list');
@@ -808,22 +1085,30 @@ function renderLivePostsList() {
     return p.name.toLowerCase().includes(q) || (p.univers||'').toLowerCase().includes(q) || (p.sousGroupe||'').toLowerCase().includes(q);
   });
   if (!avail.length) { el.innerHTML='<div class="empty">Plus aucun poste disponible.</div>'; return; }
-  const rows = avail.map(p => `<tr>
-    <td style="font-size:12px;color:var(--text2);">${esc(p.univers||'')}</td>
-    <td style="font-size:12px;color:var(--text2);">${esc(p.sousGroupe||'')}</td>
-    <td>${esc(p.name)}</td>
-  </tr>`).join('');
+  const rows = avail.map(p => {
+    const linkCell = p.url
+      ? `<a class="link-btn" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">
+           <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <path d="M5 2H2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7M8 1h3m0 0v3m0-3L5.5 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+           </svg>
+           Fiche de poste
+         </a>`
+      : `<span style="color:var(--text3);font-size:11px;">—</span>`;
+    return `<tr>
+      <td style="font-size:12px;color:var(--text2);">${esc(p.univers||'')}</td>
+      <td style="font-size:12px;color:var(--text2);">${esc(p.sousGroupe||'')}</td>
+      <td>${esc(p.name)}</td>
+      <td>${linkCell}</td>
+    </tr>`;
+  }).join('');
   el.innerHTML = `<table class="zebra"><thead>
-    <tr><th>Univers</th><th>Sous-groupe</th><th>Poste</th></tr>
+    <tr><th>Univers</th><th>Sous-groupe</th><th>Poste</th><th>Fiche de poste</th></tr>
   </thead><tbody>${rows}</tbody></table>`;
 }
 
 // ════════════════════════════════════
 //  LIVE PANEL (postes disponibles)
 // ════════════════════════════════════
-const UNIVERS_COLORS = { 'AC':'#1a7a4a','ATE':'#1A5FA0','ASU':'#8a5a0a' };
-const UNIVERS_BG     = { 'AC':'#d4f0e2','ATE':'#D6E8F8','ASU':'#fdf0d5' };
-
 function renderLivePanel() {
   const el = document.getElementById('live-panel-body');
   if (!el) return;
@@ -840,7 +1125,6 @@ function renderLivePanel() {
     const key=u+'||'+sg+'||'+p.name;
     if (!seen[key]) {
       seen[key]=true;
-      // Count total exemplaires de ce nom
       const total = posts.filter(pp=>pp.name===p.name).length;
       const rem   = posts.filter(pp=>pp.name===p.name && !taken.has(pp.id)).length;
       tree[u][sg].total+=total;
