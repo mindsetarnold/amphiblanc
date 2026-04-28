@@ -51,8 +51,10 @@ body::before {
 .screen.active { display: block; animation: fadeIn .3s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 .center-wrap { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
-.auth-box { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r-lg); padding: 2.5rem 2rem; width: 100%; max-width: 400px; text-align: center; }
-.auth-box .ornament { font-size: 28px; margin-bottom: 1rem; }
+
+/* ── Auth box (accès libre) ── */
+.auth-box { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r-lg); padding: 2.5rem 2rem; width: 100%; max-width: 420px; text-align: center; }
+.auth-box .ornament { font-size: 32px; margin-bottom: 1rem; }
 .auth-box h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold2); margin-bottom: 6px; }
 .auth-box p { font-size: 12px; color: var(--text2); margin-bottom: 1.5rem; }
 .divider { display: flex; align-items: center; gap: 10px; margin: 1.4rem 0; color: var(--text3); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -139,6 +141,15 @@ code { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--sur
 .recap-vote { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--gold2); }
 .recap-vote.empty-vote { color: var(--text3); font-style: italic; font-family: 'DM Sans', sans-serif; font-size: 12px; }
 
+/* ── Alerte déjà voté ── */
+.already-voted-banner {
+  background: var(--gold-bg); border: 1px solid var(--border2); border-radius: var(--r-lg);
+  padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
+}
+.already-voted-banner .icon { font-size: 28px; margin-bottom: 8px; }
+.already-voted-banner h3 { font-family: 'Playfair Display', serif; color: var(--gold2); font-size: 18px; margin-bottom: 4px; }
+.already-voted-banner p { font-size: 12px; color: var(--text2); }
+
 /* ── Résultats admin ── */
 .results-grid { display: grid; gap: 1rem; }
 .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
@@ -166,6 +177,9 @@ code { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--sur
 .detail-table-wrap th { font-size: 10px; }
 .detail-table-wrap td { padding: 6px 14px; }
 
+/* ── Appareil déjà utilisé ── */
+.device-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); background: var(--surface2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; margin-top: 8px; }
+
 @media (max-width: 600px) {
   .page { padding: 1.5rem 1rem 4rem; }
   .site-title { font-size: 26px; }
@@ -175,6 +189,9 @@ code { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--sur
 <body>
 
 <script>
+// ══════════════════════════════════════
+//  CONFIG FIREBASE — CORRIGÉ (minuscules)
+// ══════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyDjAt_9gox702UaXf7-EYGojv-nbfYwYuY",
   authDomain: "amphi-blanc---voeux-finaux.firebaseapp.com",
@@ -182,11 +199,24 @@ const firebaseConfig = {
   projectId: "amphi-blanc---voeux-finaux",
   storageBucket: "amphi-blanc---voeux-finaux.firebasestorage.app",
   messagingSenderId: "91659498687",
-  appId: "1:91659498687:web:33b4a83265eaaef4e5c20a",
-  measurementId: "G-S6P9DLTJ2N"
+  appId: "1:91659498687:web:33b4a83265eaaef4e5c20a"
 };
 const FB = 'gala';
-const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
+const FIREBASE_OK = !firebaseConfig.apiKey.startsWith('VOTRE');
+
+// ══════════════════════════════════════
+//  IDENTIFIANT APPAREIL (1 appareil = 1 vote)
+//  Stocké dans localStorage, persistant entre sessions
+// ══════════════════════════════════════
+function getDeviceId() {
+  let id = localStorage.getItem('gala_device_id');
+  if (!id) {
+    id = 'dev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('gala_device_id', id);
+  }
+  return id;
+}
+const DEVICE_ID = getDeviceId();
 </script>
 
 <div class="page">
@@ -200,29 +230,25 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
     </div>
   </div>
 
-  <!-- ══ LOCK ══ -->
+  <!-- ══ ACCUEIL : accès libre ══ -->
   <div id="screen-lock" class="screen active">
     <div class="center-wrap">
       <div class="auth-box">
         <div class="ornament">🏆</div>
-        <h2>Accès à la plateforme</h2>
-        <p>Entrez votre code PIN pour voter, ou le code admin pour gérer la plateforme.</p>
-        <div class="field">
-          <label>Je suis…</label>
-          <select id="pin-select" onchange="onPinSelectChange()">
-            <option value="">— Choisir mon nom —</option>
-          </select>
+        <h2>Bienvenue au Gala</h2>
+        <p>Cliquez sur le bouton pour accéder au vote. Un seul vote par appareil est autorisé.</p>
+
+        <!-- Bouton accès élève -->
+        <button class="btn btn-gold btn-full btn-lg" onclick="enterAsVoter()" id="voter-btn">
+          Accéder au vote →
+        </button>
+        <div class="err-msg" id="voter-err"></div>
+
+        <!-- Indicateur appareil -->
+        <div class="device-badge" id="device-badge" style="display:none;">
+          📱 Appareil déjà enregistré
         </div>
-        <div id="pin-field-wrap" style="display:none;">
-          <div class="field">
-            <label>Code PIN</label>
-            <input type="password" id="pin-input" placeholder="••••" maxlength="4" inputmode="numeric"
-              style="text-align:center;letter-spacing:6px;font-family:'DM Mono',monospace;"
-              onkeydown="if(event.key==='Enter')tryPin()" />
-          </div>
-          <button class="btn btn-gold btn-full btn-lg" onclick="tryPin()">Voter</button>
-          <div class="err-msg" id="pin-err"></div>
-        </div>
+
         <div class="divider">Administration</div>
         <div class="pin-row">
           <input type="password" id="admin-input" placeholder="Code admin" onkeydown="if(event.key==='Enter')tryAdmin()" />
@@ -238,10 +264,10 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
     <div style="margin-bottom:1.5rem;">
       <div class="vote-header-top">
         <div>
-          <div class="vote-student-name" id="vote-student-name">—</div>
+          <div class="vote-student-name">Vote anonyme</div>
           <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="vote-student-sub">—</div>
         </div>
-        <button class="btn btn-sm" onclick="logout()">Se déconnecter</button>
+        <button class="btn btn-sm" onclick="showScreen('screen-lock')">← Retour</button>
       </div>
     </div>
     <div class="progress-bar-wrap">
@@ -268,7 +294,7 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
     </div>
     <div class="recap-grid" id="recap-grid"></div>
     <div style="text-align:center;margin-top:1rem;">
-      <button class="btn btn-gold btn-lg" onclick="logout()">Terminer et me déconnecter</button>
+      <button class="btn btn-gold btn-lg" onclick="showScreen('screen-lock')">Terminer</button>
     </div>
   </div>
 
@@ -279,36 +305,15 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
       <button class="btn btn-sm" onclick="showScreen('screen-lock')">Verrouiller</button>
     </div>
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('tab-eleves',this)">Élèves</button>
-      <button class="tab" onclick="switchTab('tab-cats',this)">Catégories</button>
+      <button class="tab active" onclick="switchTab('tab-cats',this)">Catégories</button>
+      <button class="tab" onclick="switchTab('tab-eleves',this)">Candidats</button>
       <button class="tab" onclick="switchTab('tab-results',this)">Résultats</button>
       <button class="tab" onclick="switchTab('tab-detail',this)">Détail des votes</button>
       <button class="tab" onclick="switchTab('tab-settings',this)">Paramètres</button>
     </div>
 
-    <!-- Élèves -->
-    <div id="tab-eleves" class="admin-tab" style="display:block;">
-      <div class="card">
-        <div class="card-title">Importer les élèves</div>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Un élève par ligne : <code>Prénom Nom;PIN</code> — ex : <code>Marie Dupont;1234</code><br>Si pas de PIN : <code>Marie Dupont</code> (accès libre)</p>
-        <div class="field"><textarea id="eleves-bulk" placeholder="Marie Dupont;1234&#10;Jean Martin;5678&#10;Sophie Bernard;0000"></textarea></div>
-        <div class="flex-gap">
-          <button class="btn btn-gold" onclick="importEleves()">Importer</button>
-          <button class="btn btn-red btn-sm" onclick="clearEleves()">Tout effacer</button>
-        </div>
-        <div class="status-msg" id="eleves-status"></div>
-      </div>
-      <div class="table-wrap">
-        <div class="table-head">
-          <span class="table-head-title">Élèves enregistrés</span>
-          <span class="badge" id="eleves-count">0</span>
-        </div>
-        <div id="eleves-table"><div class="empty">Aucun élève.</div></div>
-      </div>
-    </div>
-
     <!-- Catégories -->
-    <div id="tab-cats" class="admin-tab">
+    <div id="tab-cats" class="admin-tab" style="display:block;">
       <div class="card">
         <div class="card-title">Ajouter une catégorie</div>
         <div style="display:grid;grid-template-columns:60px 1fr;gap:10px;margin-bottom:10px;">
@@ -328,6 +333,29 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
       </div>
     </div>
 
+    <!-- Candidats pré-enregistrés -->
+    <div id="tab-eleves" class="admin-tab">
+      <div class="card">
+        <div class="card-title">Importer les candidats</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">
+          Un nom par ligne. Ces noms apparaîtront dans la liste de chaque catégorie pour que les votants les sélectionnent facilement. Les votants peuvent aussi proposer un nom absent de la liste.
+        </p>
+        <div class="field"><textarea id="eleves-bulk" placeholder="Marie Dupont&#10;Jean Martin&#10;Sophie Bernard"></textarea></div>
+        <div class="flex-gap">
+          <button class="btn btn-gold" onclick="importEleves()">Importer</button>
+          <button class="btn btn-red btn-sm" onclick="clearEleves()">Tout effacer</button>
+        </div>
+        <div class="status-msg" id="eleves-status"></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-head-title">Candidats enregistrés</span>
+          <span class="badge" id="eleves-count">0</span>
+        </div>
+        <div id="eleves-table"><div class="empty">Aucun candidat.</div></div>
+      </div>
+    </div>
+
     <!-- ══ RÉSULTATS ══ -->
     <div id="tab-results" class="admin-tab">
       <div class="flex-between" style="margin-bottom:1rem;">
@@ -340,8 +368,9 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
     <!-- ══ DÉTAIL DES VOTES ══ -->
     <div id="tab-detail" class="admin-tab">
       <div class="flex-between" style="margin-bottom:1rem;">
-        <p style="font-size:12px;color:var(--text2);">Pour chaque catégorie : qui a voté pour qui. Ces informations restent confidentielles.</p>
+        <p style="font-size:12px;color:var(--text2);">Détail anonymisé par appareil. Vote par appareil limité à 1.</p>
         <div class="flex-gap">
+          <span class="badge" id="devices-count">0 appareils</span>
           <button class="btn btn-red btn-sm" onclick="resetVotes()">Réinitialiser les votes</button>
         </div>
       </div>
@@ -365,7 +394,7 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
           <label style="font-size:13px;color:var(--text);margin:0;text-transform:none;letter-spacing:0;" for="votes-open-toggle">Votes ouverts</label>
           <input type="checkbox" id="votes-open-toggle" style="width:auto;height:18px;accent-color:var(--gold);cursor:pointer;" onchange="toggleVotesOpen()" />
         </div>
-        <p style="font-size:11px;color:var(--text3);">Décochez pour clôturer les votes. Les élèves ne pourront plus modifier leurs choix.</p>
+        <p style="font-size:11px;color:var(--text3);">Décochez pour clôturer les votes. Les appareils enregistrés ne pourront plus modifier leurs choix.</p>
       </div>
     </div>
   </div>
@@ -378,24 +407,27 @@ const FIREBASE_OK = !FIREBASE_CONFIG.apiKey.startsWith('VOTRE');
 // ══════════════════════════════════════
 //  ÉTAT
 // ══════════════════════════════════════
-let eleves     = [];
+let eleves     = [];   // candidats pré-enregistrés
 let categories = [];
-let votes      = {};
+let votes      = {};   // { catId: { candidatNom: [deviceIds] } }
 let votesOpen  = true;
 let db         = null;
-let currentUser = null;
 
 // ══════════════════════════════════════
-//  FIREBASE
+//  FIREBASE — CORRIGÉ
 // ══════════════════════════════════════
 function initFirebase() {
   if (!FIREBASE_OK) { loadLocal(); return; }
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
+    firebase.initializeApp(firebaseConfig); // ← minuscules, corrigé
     db = firebase.database();
     setSync('Connexion…', false);
     setupListeners();
-  } catch(e) { setSync('Erreur', false); }
+  } catch(e) {
+    console.error('Firebase init error:', e);
+    setSync('Erreur Firebase', false);
+    loadLocal();
+  }
 }
 function setSync(t, live) {
   document.getElementById('sync-label').textContent = t;
@@ -432,7 +464,7 @@ function loadLocal() {
   const t = document.getElementById('votes-open-toggle');
   if (t) t.checked = votesOpen;
   refresh();
-  setSync('Local', false);
+  setSync('Local (hors-ligne)', false);
 }
 
 // ══════════════════════════════════════
@@ -441,7 +473,7 @@ function loadLocal() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'screen-lock') populatePinSelect();
+  if (id === 'screen-lock') updateLockScreen();
 }
 function switchTab(tabId, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.style.display = 'none');
@@ -453,45 +485,39 @@ function switchTab(tabId, btn) {
 }
 
 // ══════════════════════════════════════
-//  AUTH
+//  AUTH — ACCÈS LIBRE VOTER
 // ══════════════════════════════════════
-function populatePinSelect() {
-  const sel = document.getElementById('pin-select');
-  sel.innerHTML = '<option value="">— Choisir mon nom —</option>';
-  eleves.forEach(e => {
-    const o = document.createElement('option');
-    o.value = e.id; o.textContent = e.nom;
-    sel.appendChild(o);
-  });
-  document.getElementById('pin-input').value = '';
-  document.getElementById('pin-err').textContent = '';
-  document.getElementById('pin-field-wrap').style.display = 'none';
-}
-function onPinSelectChange() {
-  const id = document.getElementById('pin-select').value;
-  document.getElementById('pin-field-wrap').style.display = id ? '' : 'none';
-  document.getElementById('pin-input').value = '';
-  document.getElementById('pin-err').textContent = '';
-}
-function tryPin() {
-  const id = document.getElementById('pin-select').value;
-  const entered = document.getElementById('pin-input').value;
-  if (!id) return;
-  const eleve = eleves.find(e => e.id === id);
-  if (!eleve) return;
-  if (!eleve.pin || entered === eleve.pin) {
-    currentUser = eleve.nom;
-    showScreen('screen-vote');
-    renderVoteScreen();
+function updateLockScreen() {
+  const hasVoted = deviceHasVoted();
+  const badge = document.getElementById('device-badge');
+  const btn   = document.getElementById('voter-btn');
+  if (hasVoted) {
+    badge.style.display = 'inline-flex';
+    btn.textContent = 'Modifier mes votes →';
   } else {
-    document.getElementById('pin-err').textContent = 'Code PIN incorrect.';
+    badge.style.display = 'none';
+    btn.textContent = 'Accéder au vote →';
   }
 }
+
+function enterAsVoter() {
+  if (!votesOpen) {
+    document.getElementById('voter-err').textContent = 'Les votes sont clôturés.';
+    return;
+  }
+  document.getElementById('voter-err').textContent = '';
+  showScreen('screen-vote');
+  renderVoteScreen();
+}
+
 async function tryAdmin() {
   const pin = document.getElementById('admin-input').value;
   let stored = 'admin2024';
-  if (db) { try { const s = await db.ref(FB+'/settings/pin').get(); if (s.val()) stored = s.val(); } catch(e){} }
-  else stored = LS.get('pin') || 'admin2024';
+  if (db) {
+    try { const s = await db.ref(FB+'/settings/pin').get(); if (s.val()) stored = s.val(); } catch(e){}
+  } else {
+    stored = LS.get('pin') || 'admin2024';
+  }
   if (pin === stored) {
     document.getElementById('admin-input').value = '';
     document.getElementById('admin-err').textContent = '';
@@ -501,20 +527,27 @@ async function tryAdmin() {
     document.getElementById('admin-err').textContent = 'Code incorrect.';
   }
 }
-function logout() {
-  currentUser = null;
-  showScreen('screen-lock');
-}
 
 // ══════════════════════════════════════
-//  LOGIQUE VOTES
+//  LOGIQUE 1 APPAREIL = 1 VOTE
 // ══════════════════════════════════════
+function deviceHasVoted() {
+  // Vérifie si cet appareil a au moins 1 vote dans n'importe quelle catégorie
+  for (const catId of Object.keys(votes)) {
+    const catVotes = votes[catId] || {};
+    for (const votants of Object.values(catVotes)) {
+      if (Array.isArray(votants) && votants.includes(DEVICE_ID)) return true;
+    }
+  }
+  return false;
+}
+
 function myVotes() {
   const out = {};
   categories.forEach(cat => {
     const catVotes = votes[cat.id] || {};
     for (const [candidat, votants] of Object.entries(catVotes)) {
-      if (Array.isArray(votants) && votants.includes(currentUser)) {
+      if (Array.isArray(votants) && votants.includes(DEVICE_ID)) {
         out[cat.id] = candidat;
         break;
       }
@@ -530,18 +563,31 @@ function getCandidats(catId) {
     .sort((a,b) => b.count - a.count);
 }
 
+// Retourne la liste des candidats fusionnée : pré-enregistrés + ceux qui ont déjà des votes
+function getCandidatsFull(catId) {
+  const fromVotes = getCandidats(catId).map(c => c.nom);
+  const preloaded = eleves.map(e => e.nom);
+  const all = [...new Set([...preloaded, ...fromVotes])];
+  const catVotes = votes[catId] || {};
+  return all.map(nom => {
+    const votants = catVotes[nom] || [];
+    return { nom, count: Array.isArray(votants) ? votants.length : 0 };
+  }).sort((a,b) => b.count - a.count);
+}
+
 async function vote(catId, candidatNom) {
-  if (!currentUser || !votesOpen) return;
+  if (!votesOpen) return;
   const catVotes = { ...(votes[catId] || {}) };
-  // Retirer le vote précédent de cet utilisateur
+
+  // Retirer le vote précédent de cet appareil
   for (const nom of Object.keys(catVotes)) {
     const arr = catVotes[nom] || [];
-    catVotes[nom] = arr.filter(v => v !== currentUser);
+    catVotes[nom] = arr.filter(v => v !== DEVICE_ID);
     if (catVotes[nom].length === 0) delete catVotes[nom];
   }
   // Ajouter le nouveau vote
   if (candidatNom) {
-    catVotes[candidatNom] = [...(catVotes[candidatNom] || []), currentUser];
+    catVotes[candidatNom] = [...(catVotes[candidatNom] || []), DEVICE_ID];
   }
   if (db) {
     await db.ref(`${FB}/votes/${catId}`).set(Object.keys(catVotes).length ? catVotes : null);
@@ -554,18 +600,16 @@ async function vote(catId, candidatNom) {
 
 async function proposeCandidat(catId, nom) {
   const trimmed = nom.trim();
-  if (!trimmed || !currentUser) return;
+  if (!trimmed) return;
   await vote(catId, trimmed);
 }
 
 // ══════════════════════════════════════
-//  RENDER VOTE ÉLÈVE
+//  RENDER VOTE
 // ══════════════════════════════════════
 function renderVoteScreen() {
-  const nameEl = document.getElementById('vote-student-name');
-  const subEl  = document.getElementById('vote-student-sub');
-  if (nameEl) nameEl.textContent = currentUser || '—';
-  if (subEl)  subEl.textContent  = votesOpen ? 'Les votes sont ouverts' : '⚠ Les votes sont clôturés';
+  const subEl = document.getElementById('vote-student-sub');
+  if (subEl) subEl.textContent = votesOpen ? 'Les votes sont ouverts' : '⚠ Les votes sont clôturés';
 
   const my    = myVotes();
   const voted = Object.keys(my).length;
@@ -592,12 +636,12 @@ function renderVoteScreen() {
 }
 
 function renderCatCard(cat, myChoice) {
-  const candidats = getCandidats(cat.id);
+  const candidats = getCandidatsFull(cat.id);
   const hasVoted  = !!myChoice;
   const isOpen    = votesOpen;
 
   const candidatsHtml = candidats.length === 0
-    ? `<div style="font-size:12px;color:var(--text3);font-style:italic;padding:8px 0;">Aucun candidat proposé — soyez le premier !</div>`
+    ? `<div style="font-size:12px;color:var(--text3);font-style:italic;padding:8px 0;">Aucun candidat — proposez le premier nom ci-dessous !</div>`
     : candidats.map(c => {
         const selected = c.nom === myChoice;
         return `<div class="candidate-item${selected?' selected':''}" onclick="${isOpen?`selectCandidat('${esc(cat.id)}','${esc(c.nom)}')`:''}">
@@ -610,7 +654,7 @@ function renderCatCard(cat, myChoice) {
       }).join('');
 
   const proposeHtml = isOpen ? `
-    <div class="propose-hint">Vous ne trouvez pas le bon nom ? Proposez-en un :</div>
+    <div class="propose-hint">Nom absent de la liste ? Proposez-en un :</div>
     <div class="propose-row">
       <input type="text" class="propose-input" id="propose-${esc(cat.id)}" placeholder="Prénom Nom…" onkeydown="if(event.key==='Enter')proposeAndVote('${esc(cat.id)}')" />
       <button class="btn btn-gold btn-sm" onclick="proposeAndVote('${esc(cat.id)}')">Proposer & voter</button>
@@ -645,8 +689,8 @@ function proposeAndVote(catId) {
   proposeCandidat(catId, nom).then(() => { if (!db) renderVoteScreen(); });
 }
 function showRecap() {
-  const my    = myVotes();
-  const grid  = document.getElementById('recap-grid');
+  const my   = myVotes();
+  const grid = document.getElementById('recap-grid');
   if (grid) {
     grid.innerHTML = categories.map(cat => {
       const choix = my[cat.id];
@@ -663,14 +707,11 @@ function showRecap() {
 
 // ══════════════════════════════════════
 //  RENDER ADMIN — RÉSULTATS
-//  Affiche uniquement les totaux de votes
-//  (qui a le plus de voix dans chaque catégorie)
 // ══════════════════════════════════════
 function renderResults() {
   const el = document.getElementById('results-container');
   if (!el) return;
   if (!categories.length) { el.innerHTML = '<div class="empty">Aucune catégorie.</div>'; return; }
-
   const allEmpty = categories.every(cat => getCandidats(cat.id).length === 0);
   if (allEmpty) { el.innerHTML = '<div class="empty">Aucun vote enregistré.</div>'; return; }
 
@@ -714,36 +755,41 @@ function renderResults() {
 }
 
 // ══════════════════════════════════════
-//  RENDER ADMIN — DÉTAIL DES VOTES
-//  Affiche, pour chaque catégorie,
-//  le tableau votant → candidat choisi
+//  RENDER ADMIN — DÉTAIL (par appareil)
 // ══════════════════════════════════════
 function renderDetail() {
   const el = document.getElementById('detail-container');
   if (!el) return;
   if (!categories.length) { el.innerHTML = '<div class="empty">Aucune catégorie.</div>'; return; }
 
-  // Construire, pour chaque catégorie, la liste votant → choix
+  // Compter les appareils uniques
+  const allDevices = new Set();
+  for (const catId of Object.keys(votes)) {
+    for (const votants of Object.values(votes[catId] || {})) {
+      if (Array.isArray(votants)) votants.forEach(d => allDevices.add(d));
+    }
+  }
+  const devCount = document.getElementById('devices-count');
+  if (devCount) devCount.textContent = `${allDevices.size} appareil${allDevices.size>1?'s':''}`;
+
   const html = categories.map(cat => {
     const catVotes = votes[cat.id] || {};
-
-    // Inverser la structure : { candidat: [votants] } → { votant: candidat }
-    const parVotant = {}; // { nomVotant: nomCandidat }
+    // { deviceId: candidat }
+    const parAppareil = {};
     for (const [candidat, votants] of Object.entries(catVotes)) {
       if (!Array.isArray(votants)) continue;
-      votants.forEach(votant => { parVotant[votant] = candidat; });
+      votants.forEach(dev => { parAppareil[dev] = candidat; });
     }
-
-    const lignes = Object.entries(parVotant).sort((a,b) => a[0].localeCompare(b[0]));
+    const lignes  = Object.entries(parAppareil);
     const nbVotes = lignes.length;
 
     const tableContent = lignes.length === 0
       ? `<div class="empty" style="padding:1rem;">Aucun vote pour l'instant.</div>`
       : `<div class="detail-table-wrap"><table>
-          <thead><tr><th>Élève</th><th>A voté pour</th></tr></thead>
+          <thead><tr><th>Appareil</th><th>A voté pour</th></tr></thead>
           <tbody>
-            ${lignes.map(([votant, candidat]) => `<tr>
-              <td style="color:var(--text2);">${esc(votant)}</td>
+            ${lignes.map(([dev, candidat], i) => `<tr>
+              <td style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px;">Appareil ${i+1}</td>
               <td style="font-weight:500;color:var(--gold2);">${esc(candidat)}</td>
             </tr>`).join('')}
           </tbody>
@@ -763,17 +809,16 @@ function renderDetail() {
 }
 
 // ══════════════════════════════════════
-//  RENDER ADMIN — ÉLÈVES / CATÉGORIES
+//  RENDER ADMIN — CANDIDATS / CATÉGORIES
 // ══════════════════════════════════════
 function renderAdminEleves() {
   document.getElementById('eleves-count').textContent = eleves.length;
   const el = document.getElementById('eleves-table');
   if (!el) return;
-  if (!eleves.length) { el.innerHTML = '<div class="empty">Aucun élève.</div>'; return; }
-  el.innerHTML = `<table><thead><tr><th>Nom</th><th>PIN</th><th></th></tr></thead><tbody>` +
+  if (!eleves.length) { el.innerHTML = '<div class="empty">Aucun candidat pré-enregistré.</div>'; return; }
+  el.innerHTML = `<table><thead><tr><th>Nom</th><th></th></tr></thead><tbody>` +
     eleves.map(e => `<tr>
       <td>${esc(e.nom)}</td>
-      <td><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);">${e.pin ? '••••' : 'aucun'}</span></td>
       <td><button class="del-btn" onclick="delEleve('${e.id}')">✕</button></td>
     </tr>`).join('') + `</tbody></table>`;
 }
@@ -796,12 +841,15 @@ function renderAdminCats() {
 //  REFRESH GLOBAL
 // ══════════════════════════════════════
 function refresh() {
-  populatePinSelect();
   renderAdminEleves();
   renderAdminCats();
   renderResults();
   renderDetail();
-  if (currentUser) renderVoteScreen();
+  updateLockScreen();
+  // Si on est sur l'écran vote, on rafraîchit aussi
+  if (document.getElementById('screen-vote').classList.contains('active')) {
+    renderVoteScreen();
+  }
 }
 
 // ══════════════════════════════════════
@@ -811,11 +859,9 @@ async function importEleves() {
   const lines = document.getElementById('eleves-bulk').value.trim().split('\n').filter(l=>l.trim());
   const toImport = [];
   lines.forEach(line => {
-    const parts = line.split(';');
-    const nom = parts[0].trim(); if (!nom) return;
-    const pin = parts[1]?.trim() || '';
+    const nom = line.trim(); if (!nom) return;
     const id  = 'e_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-    toImport.push({id, nom, pin});
+    toImport.push({id, nom});
   });
   if (!toImport.length) { setStatus('eleves-status','Format invalide.','er'); return; }
   if (db) {
@@ -826,11 +872,11 @@ async function importEleves() {
     LS.set('eleves', eleves); refresh();
   }
   document.getElementById('eleves-bulk').value = '';
-  setStatus('eleves-status', `${toImport.length} élève(s) importé(s).`, 'ok');
+  setStatus('eleves-status', `${toImport.length} candidat(s) importé(s).`, 'ok');
 }
 
 async function clearEleves() {
-  if (!confirm('Effacer tous les élèves ?')) return;
+  if (!confirm('Effacer tous les candidats pré-enregistrés ?')) return;
   if (db) await db.ref(`${FB}/eleves`).remove();
   else { eleves=[]; LS.set('eleves',[]); refresh(); }
 }
