@@ -308,7 +308,6 @@ const DEVICE_ID = getDeviceId();
       <button class="tab active" onclick="switchTab('tab-cats',this)">Catégories</button>
       <button class="tab" onclick="switchTab('tab-eleves',this)">Candidats</button>
       <button class="tab" onclick="switchTab('tab-results',this)">Résultats</button>
-      <button class="tab" onclick="switchTab('tab-detail',this)">Détail des votes</button>
       <button class="tab" onclick="switchTab('tab-settings',this)">Paramètres</button>
     </div>
 
@@ -363,18 +362,6 @@ const DEVICE_ID = getDeviceId();
         <button class="btn btn-sm" onclick="exportCSV()">Exporter CSV</button>
       </div>
       <div id="results-container"><div class="empty">Aucun vote enregistré.</div></div>
-    </div>
-
-    <!-- ══ DÉTAIL DES VOTES ══ -->
-    <div id="tab-detail" class="admin-tab">
-      <div class="flex-between" style="margin-bottom:1rem;">
-        <p style="font-size:12px;color:var(--text2);">Détail anonymisé par appareil. Vote par appareil limité à 1.</p>
-        <div class="flex-gap">
-          <span class="badge" id="devices-count">0 appareils</span>
-          <button class="btn btn-red btn-sm" onclick="resetVotes()">Réinitialiser les votes</button>
-        </div>
-      </div>
-      <div id="detail-container"><div class="empty">Aucun vote enregistré.</div></div>
     </div>
 
     <!-- Paramètres -->
@@ -649,7 +636,6 @@ function renderCatCard(cat, myChoice) {
             <div class="candidate-radio"></div>
             <span class="candidate-name">${esc(c.nom)}</span>
           </div>
-          <span class="candidate-votes">${c.count} vote${c.count>1?'s':''}</span>
         </div>`;
       }).join('');
 
